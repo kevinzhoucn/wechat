@@ -1,0 +1,9 @@
+acme_webchat_homepage:
+    path: /
+    defaults:
+        _controller: AcmeWechatBundle:Default:index
+
+acme_wechat_signature:
+    path: /api/checksignature
+    defaults:
+        _controller: AcmeWechatBundle:Wechat:checksignature

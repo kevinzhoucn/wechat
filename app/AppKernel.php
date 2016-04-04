@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new CodeExplorerBundle\CodeExplorerBundle(),
             new AppBundle\AppBundle(),
             new Acme\Bundle\WebBundle\AcmeWebBundle(),
+            new Acme\Bundle\WechatBundle\AcmeWechatBundle(),
         );
 
         // Some bundles are only used while developing the application or during

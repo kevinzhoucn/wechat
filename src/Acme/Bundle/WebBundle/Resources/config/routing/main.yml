@@ -1,0 +1,4 @@
+acme_web_homepage:
+    path: /
+    defaults:
+        _controller: AcmeWebBundle:Front:index
