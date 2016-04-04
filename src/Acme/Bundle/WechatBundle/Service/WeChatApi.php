@@ -31,7 +31,6 @@ class WeChatApi
             $result = $echoStr;
         } else {
             $result = "error: signature not matched!";
-            $result = $echoStr;
         }
 
         if($this->container->getParameter("app.debug.wechat.access_info") === true){
