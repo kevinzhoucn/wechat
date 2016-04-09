@@ -19,6 +19,7 @@ class WeChatApi
         $signature = $request->get("signature");
         $timestamp = $request->get("timestamp");
         $nonce = $request->get("nonce");
+        $echoStr = $request->get("echostr");
 
         $token = $this->container->getParameter("wechat_token");
         $tmpArr = array($token, $timestamp, $nonce);
@@ -27,14 +28,15 @@ class WeChatApi
         $tmpStr = sha1( $tmpStr );
 
         if($tmpStr === $signature){
-            $result = $nonce;
+            $result = $echoStr;
         } else {
             $result = "error: signature not matched!";
+            $result = $echoStr;
         }
 
         if($this->container->getParameter("app.debug.wechat.access_info") === true){
             $logger = $this->container->get("my_service.logger");
-            $info = sprintf("signature: \"%s\", timestamp: \"%s\", nonce: \"%s\"", $signature, $timestamp, $nonce);
+            $info = sprintf("signature: \"%s\", timestamp: \"%s\", nonce: \"%s\", echostr: \"%s\"", $signature, $timestamp, $nonce, $echoStr);
             $logger->info($info);
         }
 

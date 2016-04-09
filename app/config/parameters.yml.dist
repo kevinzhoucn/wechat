@@ -45,3 +45,4 @@ parameters:
     # 'Remember Me' functionality, etc.)
     # see: http://symfony.com/doc/current/reference/configuration/framework.html#secret
     secret: 'secret_value_for_symfony_demo_application'
+    wechat_token: 'secre_token'
