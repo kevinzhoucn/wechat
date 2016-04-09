@@ -7,3 +7,8 @@ acme_wechat_signature:
     path: /api/checksignature
     defaults:
         _controller: AcmeWechatBundle:Wechat:checksignature
+
+acme_wechat_access_token:
+    path: /api/access_token
+    defaults:
+        _controller: AcmeWechatBundle:Wechat:getAccessToken

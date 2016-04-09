@@ -15,4 +15,12 @@ class WechatController extends Controller
 
         return new Response($result);
     }
+
+    public function getAccessTokenAction()
+    {
+        $webchatApi = $this->container->get('acme.wechat.api');
+        $result = $webchatApi->getAccessToken();
+
+        return new Response($result);
+    }
 }

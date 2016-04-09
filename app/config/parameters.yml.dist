@@ -46,3 +46,7 @@ parameters:
     # see: http://symfony.com/doc/current/reference/configuration/framework.html#secret
     secret: 'secret_value_for_symfony_demo_application'
     wechat_token: 'secre_token'
+    wechat_access_token_expires_time_window: 7200
+    wechat_access_token_url: "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential"
+    wechat_appid: "wechat_appid"
+    wechat_appsecret: "wechat_appsecret"
