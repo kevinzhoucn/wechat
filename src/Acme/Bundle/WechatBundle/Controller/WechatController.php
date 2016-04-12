@@ -15,4 +15,29 @@ class WechatController extends Controller
 
         return new Response($result);
     }
+
+    public function getAccessTokenAction()
+    {
+        $webchatApi = $this->container->get('acme.wechat.api');
+        $result = $webchatApi->getAccessToken();
+
+        return new Response($result);
+    }
+
+    public function getJsTicketAction()
+    {
+        $webchatApi = $this->container->get('acme.wechat.api');
+        $result = $webchatApi->getJsTicket();
+
+        return new Response($result);
+    }
+
+    public function airkissAction()
+    {
+        $webchatApi = $this->container->get('acme.wechat.api');
+        list($appid, $timestamp, $nonceStr, $signature) = $webchatApi->getJsTicketSignatureList();
+
+        // return new Response(sprintf("appid: %s, timestamp: %s, nonce: %s, signature: %s", $appid, $timestamp, $nonceStr, $signature));
+        return $this->render('AcmeWechatBundle:Wechat:airkiss.html.twig', array('appid' => $appid, 'timestamp' => $timestamp, 'nonceStr' => $nonceStr, 'signature' => $signature));
+    }
 }
