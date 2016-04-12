@@ -1,19 +1,19 @@
 acme_wechat_signature:
-    path: /api/checksignature
+    path: /api/checksignature/
     defaults:
         _controller: AcmeWechatBundle:Wechat:checksignature
 
 acme_wechat_access_token:
-    path: /api/access_token
+    path: /api/access_token/
     defaults:
         _controller: AcmeWechatBundle:Wechat:getAccessToken
 
 acme_wechat_js_ticket:
-    path: /api/js_ticket
+    path: /api/js_ticket/
     defaults:
         _controller: AcmeWechatBundle:Wechat:getJsTicket
 
 acme_webchat_js_signature:
-    path: /api/airkiss
+    path: /api/airkiss/
     defaults:
         _controller: AcmeWechatBundle:Wechat:airkiss
