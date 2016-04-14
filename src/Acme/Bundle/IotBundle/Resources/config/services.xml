@@ -13,6 +13,7 @@
         </service>
     </services>
     -->
+    
     <parameters>
         <parameter key="acme.iot.security.class">Acme\Bundle\IotBundle\Service\Security</parameter>
         <parameter key="acme.iot.security.xxtea.class">Acme\Bundle\IotBundle\Service\SecurityStrategy\XxteaStrategy</parameter>

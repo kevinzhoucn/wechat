@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Device list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Uuid</th>
+                <th>Createdat</th>
+                <th>Updatedat</th>
+                <th>Deletedat</th>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for device in devices %}
+            <tr>
+                <td><a href="{{ path('device_show', { 'id': device.id }) }}">{{ device.name }}</a></td>
+                <td>{{ device.uuid }}</td>
+                <td>{% if device.createdAt %}{{ device.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if device.updatedAt %}{{ device.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if device.deletedAt %}{{ device.deletedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ device.id }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('device_show', { 'id': device.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('device_edit', { 'id': device.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('device_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

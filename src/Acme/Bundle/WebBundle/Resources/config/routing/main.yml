@@ -6,6 +6,15 @@ acme_iot:
     resource: "@AcmeIotBundle/Resources/config/routing/main.yml"
     prefix:   /iot
 
+acme_iot_api:
+    resource: "@AcmeIotBundle/Resources/config/routing/apiv1_1.yml"
+    prefix:   /iotdev/v1.1
+
 acme_wechat:
     resource: "@AcmeWechatBundle/Resources/config/routing/main.yml"
     prefix:   /wechat
+
+acme_user:
+    resource: "@AcmeUserBundle/Resources/config/routing/main.yml"
+    prefix:   /user
+

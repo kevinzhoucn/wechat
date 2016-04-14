@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new Acme\Bundle\WebBundle\AcmeWebBundle(),
             new Acme\Bundle\WechatBundle\AcmeWechatBundle(),
             new Acme\Bundle\IotBundle\AcmeIotBundle(),
+            new Acme\Bundle\UserBundle\AcmeUserBundle(),
         );
 
         // Some bundles are only used while developing the application or during

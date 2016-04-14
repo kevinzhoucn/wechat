@@ -1,0 +1,4 @@
+device_receive:
+    path:     /send
+    defaults: { _controller: "AcmeIotBundle:ApiV11:send" }
+    methods:  GET

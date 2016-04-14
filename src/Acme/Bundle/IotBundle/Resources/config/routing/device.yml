@@ -1,0 +1,30 @@
+# device_index:
+#     path:     /
+#     defaults: { _controller: "AcmeIotBundle:Device:index" }
+#     methods:  GET
+
+# device_show:
+#     path:     /{id}/show
+#     defaults: { _controller: "AcmeIotBundle:Device:show" }
+#     methods:  GET
+
+# device_new:
+#     path:     /new
+#     defaults: { _controller: "AcmeIotBundle:Device:new" }
+#     methods:  [GET, POST]
+
+# device_edit:
+#     path:     /{id}/edit
+#     defaults: { _controller: "AcmeIotBundle:Device:edit" }
+#     methods:  [GET, POST]
+
+# device_delete:
+#     path:     /{id}/delete
+#     defaults: { _controller: "AcmeIotBundle:Device:delete" }
+#     methods:  DELETE
+
+
+device_new:
+    path:     /bind/new/
+    defaults: { _controller: "AcmeIotBundle:Device:bind" }
+    methods:  [GET, POST]
