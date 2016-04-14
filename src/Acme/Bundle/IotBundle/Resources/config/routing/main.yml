@@ -1,0 +1,2 @@
+acme_iot_main:
+    resource: "@AcmeIotBundle/Resources/config/routing/iot.yml"

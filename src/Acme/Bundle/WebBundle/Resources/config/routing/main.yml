@@ -1,4 +1,11 @@
-acme_web_homepage:
-    path: /
-    defaults:
-        _controller: AcmeWebBundle:Front:index
+acme_web:
+    resource: "@AcmeWebBundle/Resources/config/routing/web.yml"
+    prefix:   /web
+
+acme_iot:
+    resource: "@AcmeIotBundle/Resources/config/routing/main.yml"
+    prefix:   /iot
+
+acme_wechat:
+    resource: "@AcmeWechatBundle/Resources/config/routing/main.yml"
+    prefix:   /wechat
