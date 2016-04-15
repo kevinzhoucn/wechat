@@ -18,3 +18,6 @@ acme_user:
     resource: "@AcmeUserBundle/Resources/config/routing/main.yml"
     prefix:   /user
 
+acme_alert:
+    resource: "@AcmeAlertBundle/Resources/config/routing/main.yml"
+    prefix:   /alert
