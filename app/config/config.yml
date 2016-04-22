@@ -18,6 +18,7 @@ parameters:
     app.notifications.email_sender: anonymous@example.com
     # Enable log 'dev_my.log' wechat access information, set to true
     app.debug.wechat.access_info: true
+    app.iot.security.method: xxtea
 
 # Basic configuration for the Symfony framework features
 framework:

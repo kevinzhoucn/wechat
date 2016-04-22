@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity 
+        table="qomo_device"
+        repository-class="Acme\Bundle\IotBundle\Repository\DeviceRepository" 
+        name="Acme\Bundle\IotBundle\Entity\Device">
+
+        <id name="id" type="integer" column="id">
+          <generator strategy="AUTO"/>
+        </id>
+
+        <field name="name" type="string" column="name" length="25" nullable="true"/>
+        <field name="uuid" type="string" column="uuid" length="32" unique="true"/>
+
+        <many-to-one field="user" target-entity="Acme\Bundle\UserBundle\Entity\User">
+            <join-column name="user_id" referenced-column-name="id" nullable="true" />
+        </many-to-one>
+
+        <field name="createdAt" column="created_at" type="datetime" nullable="true">
+            <gedmo:timestampable on="create"/>
+        </field>
+        <field name="updatedAt" column="updated_at" type="datetime" nullable="true">
+            <gedmo:timestampable on="update"/>
+        </field>
+        <field name="deletedAt" column="deleted_at" type="datetime" nullable="true" />
+    </entity>
+</doctrine-mapping>

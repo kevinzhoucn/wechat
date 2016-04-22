@@ -24,64 +24,64 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  *     $ phpunit -c app
  *
  */
-class DefaultControllerTest extends WebTestCase
-{
-    /**
-     * PHPUnit's data providers allow to execute the same tests repeated times
-     * using a different set of data each time.
-     * See http://symfony.com/doc/current/cookbook/form/unit_testing.html#testing-against-different-sets-of-data.
-     *
-     * @dataProvider getPublicUrls
-     */
-    public function testPublicUrls($url)
-    {
-        $client = self::createClient();
-        $client->request('GET', $url);
+// class DefaultControllerTest extends WebTestCase
+// {
+//     /**
+//      * PHPUnit's data providers allow to execute the same tests repeated times
+//      * using a different set of data each time.
+//      * See http://symfony.com/doc/current/cookbook/form/unit_testing.html#testing-against-different-sets-of-data.
+//      *
+//      * @dataProvider getPublicUrls
+//      */
+//     public function testPublicUrls($url)
+//     {
+//         $client = self::createClient();
+//         $client->request('GET', $url);
 
-        $this->assertTrue(
-            $client->getResponse()->isSuccessful(),
-            sprintf('The %s public URL loads correctly.', $url)
-        );
-    }
+//         $this->assertTrue(
+//             $client->getResponse()->isSuccessful(),
+//             sprintf('The %s public URL loads correctly.', $url)
+//         );
+//     }
 
-    /**
-     * The application contains a lot of secure URLs which shouldn't be
-     * publicly accessible. This tests ensures that whenever a user tries to
-     * access one of those pages, a redirection to the login form is performed.
-     *
-     * @dataProvider getSecureUrls
-     */
-    public function testSecureUrls($url)
-    {
-        $client = self::createClient();
-        $client->request('GET', $url);
+//     *
+//      * The application contains a lot of secure URLs which shouldn't be
+//      * publicly accessible. This tests ensures that whenever a user tries to
+//      * access one of those pages, a redirection to the login form is performed.
+//      *
+//      * @dataProvider getSecureUrls
+     
+//     public function testSecureUrls($url)
+//     {
+//         $client = self::createClient();
+//         $client->request('GET', $url);
 
-        $this->assertTrue($client->getResponse()->isRedirect());
+//         $this->assertTrue($client->getResponse()->isRedirect());
 
-        $this->assertEquals(
-            'http://localhost/en/login',
-            $client->getResponse()->getTargetUrl(),
-            sprintf('The %s secure URL redirects to the login form.', $url)
-        );
-    }
+//         $this->assertEquals(
+//             'http://localhost/en/login',
+//             $client->getResponse()->getTargetUrl(),
+//             sprintf('The %s secure URL redirects to the login form.', $url)
+//         );
+//     }
 
-    public function getPublicUrls()
-    {
-        return array(
-            array('/'),
-            array('/en/blog/'),
-            array('/en/blog/posts/morbi-tempus-commodo-mattis'),
-            array('/en/login'),
-        );
-    }
+//     public function getPublicUrls()
+//     {
+//         return array(
+//             array('/'),
+//             array('/en/blog/'),
+//             array('/en/blog/posts/morbi-tempus-commodo-mattis'),
+//             array('/en/login'),
+//         );
+//     }
 
-    public function getSecureUrls()
-    {
-        return array(
-            array('/en/admin/post/'),
-            array('/en/admin/post/new'),
-            array('/en/admin/post/1'),
-            array('/en/admin/post/1/edit'),
-        );
-    }
-}
+//     public function getSecureUrls()
+//     {
+//         return array(
+//             array('/en/admin/post/'),
+//             array('/en/admin/post/new'),
+//             array('/en/admin/post/1'),
+//             array('/en/admin/post/1/edit'),
+//         );
+//     }
+// }

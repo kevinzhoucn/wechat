@@ -1,0 +1,6 @@
+acme_iot_main:
+    resource: "@AcmeIotBundle/Resources/config/routing/iot.yml"
+
+acme_iot_device:
+    resource: "@AcmeIotBundle/Resources/config/routing/device.yml"
+    prefix: /device

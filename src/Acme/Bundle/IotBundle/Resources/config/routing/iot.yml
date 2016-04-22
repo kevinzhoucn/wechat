@@ -1,0 +1,9 @@
+acme_iot_date:
+    path: /api/checkdate
+    defaults:
+        _controller: AcmeIotBundle:ApiBase:checkDate
+
+acme_iot_security:
+    path: /api/checksecurity
+    defaults:
+        _controller: AcmeIotBundle:ApiBase:checkSecurity

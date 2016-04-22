@@ -3,13 +3,12 @@ homepage:
     defaults:
         _controller: AcmeWebBundle:Front:index
 
-acme_web:
+# Web routing file include all routing from bundle
+# Single Entry for the site
+acme_web_entry:
     resource: "@AcmeWebBundle/Resources/config/routing/main.yml"
-    prefix:   /web
+    prefix:   /
 
-acme_wechat:
-    resource: "@AcmeWechatBundle/Resources/config/routing/main.yml"
-    prefix:   /wechat
 
 # These first lines load the all routes defined as @Route() annotations in any
 # controller defined inside the src/AppBundle/Controller/ directory. Controllers

@@ -1,0 +1,4 @@
+acme_user_user:
+    resource: "@AcmeUserBundle/Resources/config/routing/user.yml"
+    prefix:   /user
+

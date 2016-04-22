@@ -30,45 +30,45 @@ use AppBundle\Entity\Post;
  *     $ phpunit -c app
  *
  */
-class BlogControllerTest extends WebTestCase
-{
-    public function testRegularUsersCannotAccessToTheBackend()
-    {
-        $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'john_user',
-            'PHP_AUTH_PW'   => 'kitten',
-        ));
+// class BlogControllerTest extends WebTestCase
+// {
+//     public function testRegularUsersCannotAccessToTheBackend()
+//     {
+//         $client = static::createClient(array(), array(
+//             'PHP_AUTH_USER' => 'john_user',
+//             'PHP_AUTH_PW'   => 'kitten',
+//         ));
 
-        $client->request('GET', '/en/admin/post/');
+//         $client->request('GET', '/en/admin/post/');
 
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
-    }
+//         $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
+//     }
 
-    public function testAdministratorUsersCanAccessToTheBackend()
-    {
-        $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'anna_admin',
-            'PHP_AUTH_PW'   => 'kitten',
-        ));
+//     public function testAdministratorUsersCanAccessToTheBackend()
+//     {
+//         $client = static::createClient(array(), array(
+//             'PHP_AUTH_USER' => 'anna_admin',
+//             'PHP_AUTH_PW'   => 'kitten',
+//         ));
 
-        $client->request('GET', '/en/admin/post/');
+//         $client->request('GET', '/en/admin/post/');
 
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-    }
+//         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+//     }
 
-    public function testIndex()
-    {
-        $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'anna_admin',
-            'PHP_AUTH_PW'   => 'kitten',
-        ));
+//     public function testIndex()
+//     {
+//         $client = static::createClient(array(), array(
+//             'PHP_AUTH_USER' => 'anna_admin',
+//             'PHP_AUTH_PW'   => 'kitten',
+//         ));
 
-        $crawler = $client->request('GET', '/en/admin/post/');
+//         $crawler = $client->request('GET', '/en/admin/post/');
 
-        $this->assertCount(
-            Post::NUM_ITEMS,
-            $crawler->filter('body#admin_post_index #main tbody tr'),
-            'The backend homepage displays the right number of posts.'
-        );
-    }
-}
+//         $this->assertCount(
+//             Post::NUM_ITEMS,
+//             $crawler->filter('body#admin_post_index #main tbody tr'),
+//             'The backend homepage displays the right number of posts.'
+//         );
+//     }
+// }

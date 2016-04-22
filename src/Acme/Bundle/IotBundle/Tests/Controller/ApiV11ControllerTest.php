@@ -1,0 +1,76 @@
+<?php
+
+namespace Acme\Bundle\IotBundle\Tests\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+class ApiV11ControllerTest extends WebTestCase
+{
+    public function testReceiveData()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', 
+                                    '/iotdev/v1.1/send?sn=12345asdf&' .
+                                    'value=1-10-1461041182123_2-120-1461041182123&' .
+                                    'vender=jimupai&model=JMA01&random=1c2a448f15ce5149'
+                                    );
+
+        $this->assertEquals(
+                            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+                            $client->getResponse()->getStatusCode()
+                            );
+    }
+
+    public function testParseData()
+    {
+
+    }
+
+    /*
+    public function testCompleteScenario()
+    {
+        // Create a new client to browse the application
+        $client = static::createClient();
+
+        // Create a new entry in the database
+        $crawler = $client->request('GET', '/device/');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /device/");
+        $crawler = $client->click($crawler->selectLink('Create a new entry')->link());
+
+        // Fill in the form and submit it
+        $form = $crawler->selectButton('Create')->form(array(
+            'acme_bundle_iotbundle_device[field_name]'  => 'Test',
+            // ... other fields to fill
+        ));
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+
+        // Check data in the show view
+        $this->assertGreaterThan(0, $crawler->filter('td:contains("Test")')->count(), 'Missing element td:contains("Test")');
+
+        // Edit the entity
+        $crawler = $client->click($crawler->selectLink('Edit')->link());
+
+        $form = $crawler->selectButton('Update')->form(array(
+            'acme_bundle_iotbundle_device[field_name]'  => 'Foo',
+            // ... other fields to fill
+        ));
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+
+        // Check the element contains an attribute with value equals "Foo"
+        $this->assertGreaterThan(0, $crawler->filter('[value="Foo"]')->count(), 'Missing element [value="Foo"]');
+
+        // Delete the entity
+        $client->submit($crawler->selectButton('Delete')->form());
+        $crawler = $client->followRedirect();
+
+        // Check the entity has been delete on the list
+        $this->assertNotRegExp('/Foo/', $client->getResponse()->getContent());
+    }
+
+    */
+}
