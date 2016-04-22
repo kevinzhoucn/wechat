@@ -2,7 +2,14 @@
     <h1>Bind Device</h1>
 
     {{ form_start(form) }}
-        {{ form_widget(form) }}
+        {{ form_row(form.phone) }}
+        {{ form_row(form.sn) }}
+
+        <div>
+            <span>Add more phones:</span>
+            {{ form_row(form.phone1) }}
+            {{ form_row(form.phone2) }}
+        </div>
         <input type="submit" value="Bind" />
     {{ form_end(form) }}
 

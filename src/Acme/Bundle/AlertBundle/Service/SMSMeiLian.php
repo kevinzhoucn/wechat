@@ -55,7 +55,11 @@ class SMSMeiLian
                         'content'      => $contentUrlEncode,
                         'encode'       => $encode
                       );
+
         $result = $this->curlSMS($url, $data);
+
+        // var_dump($url);
+        // var_dump($data);
 
         return $result;
     }

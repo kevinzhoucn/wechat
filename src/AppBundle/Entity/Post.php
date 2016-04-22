@@ -70,7 +70,7 @@ class Post
      */
     private $publishedAt;
 
-    /**
+    /*
      * @ORM\OneToMany(
      *      targetEntity="Comment",
      *      mappedBy="post",
@@ -78,6 +78,7 @@ class Post
      * )
      * @ORM\OrderBy({"publishedAt" = "DESC"})
      */
+     
     private $comments;
 
     public function __construct()

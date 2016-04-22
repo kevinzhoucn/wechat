@@ -3,6 +3,7 @@
 namespace Acme\Bundle\IotBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Device
@@ -22,8 +23,48 @@ class Device
     /**
      * @var string
      */
-    private $uuid;
+    private $sn;
 
+    /**
+     * @var string
+     */
+    private $model;
+
+    /**
+     * @var string
+     */
+    private $vender;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $datapoints;
+
+    /**
+     * @var string
+     */
+    private $nextAlertTime;    
+
+    /**
+     * @var \DateTime
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    /**
+     * @var \DateTime
+     */
+    private $deletedAt;
+
+    public function __construct()
+    {
+        $this->datapoints = new ArrayCollection();
+        // $this->createdAt = time();
+    }
 
     /**
      * Get id
@@ -57,43 +98,6 @@ class Device
     {
         return $this->name;
     }
-
-    /**
-     * Set uuid
-     *
-     * @param string $uuid
-     * @return Device
-     */
-    public function setUuid($uuid)
-    {
-        $this->uuid = $uuid;
-
-        return $this;
-    }
-
-    /**
-     * Get uuid
-     *
-     * @return string 
-     */
-    public function getUuid()
-    {
-        return $this->uuid;
-    }
-    /**
-     * @var \DateTime
-     */
-    private $createdAt;
-
-    /**
-     * @var \DateTime
-     */
-    private $updatedAt;
-
-    /**
-     * @var \DateTime
-     */
-    private $deletedAt;
 
 
     /**
@@ -191,5 +195,142 @@ class Device
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set sn
+     *
+     * @param string $sn
+     * @return Device
+     */
+    public function setSn($sn)
+    {
+        $this->sn = $sn;
+
+        return $this;
+    }
+
+    /**
+     * Get sn
+     *
+     * @return string 
+     */
+    public function getSn()
+    {
+        return $this->sn;
+    }
+
+    /**
+     * Set model
+     *
+     * @param string $model
+     * @return Device
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+
+        return $this;
+    }
+
+    /**
+     * Get model
+     *
+     * @return string 
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * Set vender
+     *
+     * @param string $vender
+     * @return Device
+     */
+    public function setVender($vender)
+    {
+        $this->vender = $vender;
+
+        return $this;
+    }
+
+    /**
+     * Get vender
+     *
+     * @return string 
+     */
+    public function getVender()
+    {
+        return $this->vender;
+    }
+
+    /**
+     * Set next alert time
+     *
+     * @param string $nextAlertTime
+     * @return Device
+     */
+    public function setNextAlertTime($nextAlertTime)
+    {
+        $this->nextAlertTime = $nextAlertTime;
+
+        return $this;
+    }
+
+    /**
+     * Get nextAlertTime
+     *
+     * @return string 
+     */
+    public function getNextAlertTime()
+    {
+        return $this->nextAlertTime;
+    }
+
+    /**
+     * Add datapoints
+     *
+     * @param \Acme\Bundle\IotBundle\Entity\DataPoint $datapoints
+     * @return Device
+     */
+    public function addDatapoint(\Acme\Bundle\IotBundle\Entity\DataPoint $datapoint)
+    {
+        $this->datapoints[] = $datapoint;
+
+        return $this;
+    }
+
+    /**
+     * Remove datapoints
+     *
+     * @param \Acme\Bundle\IotBundle\Entity\DataPoint $datapoints
+     */
+    public function removeDatapoint(\Acme\Bundle\IotBundle\Entity\DataPoint $datapoint)
+    {
+        $this->datapoints->removeElement($datapoint);
+    }
+
+    /**
+     * Get datapoints
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDatapoints()
+    {
+        return $this->datapoints;
+    }
+
+    public function getAlertMobiles()
+    {
+        $mobiles = "";
+
+        if($this->user) {
+            // echo count($this->user->getPhones()->toArray());
+            $mobiles = implode(',', $this->user->getPhones()->toArray());
+        }
+
+        return $mobiles;
     }
 }

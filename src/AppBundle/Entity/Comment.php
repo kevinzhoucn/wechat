@@ -41,7 +41,7 @@ class Comment
      */
     private $post;
 
-    /**
+    /*
      * @ORM\Column(type="text")
      * @Assert\NotBlank(message="comment.blank")
      * @Assert\Length(
@@ -51,6 +51,7 @@ class Comment
      *     maxMessage = "comment.too_long"
      * )
      */
+     
     private $content;
 
     /**
