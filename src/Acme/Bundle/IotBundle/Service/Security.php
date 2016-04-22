@@ -48,4 +48,24 @@ class Security
     {
         return $this->securityStrategy->decrypt($dataPack);
     }
+
+    public function encryptAlert($str)
+    {        
+        $strPack = array('str' => $str,
+                          'key' => 'TTuuIvb76TY123Ki');
+
+        $secStr = $this->encrypt($strPack);
+
+        return $secStr;
+    }
+
+    public function decryptAlert($str)
+    {        
+        $strPack = array('str' => $str,
+                          'key' => 'TTuuIvb76TY123Ki');
+
+        $secStr = $this->decrypt($strPack);
+
+        return $secStr;
+    }
 }

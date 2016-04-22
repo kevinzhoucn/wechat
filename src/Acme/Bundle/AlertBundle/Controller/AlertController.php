@@ -12,12 +12,12 @@ class AlertController extends Controller
         return $this->render('AcmeAlertBundle:Alert:index.html.twig');
     }
 
-    public function smsAction()
-    {
-        $sms = $this->container->get('acme.alert.sms.meilian');
+    // public function smsAction()
+    // {
+    //     $sms = $this->container->get('acme.alert.sms.meilian');
 
-        $result = $sms->sendSMSText('18001358893', '欢迎使用 验证码为1234！');
+    //     $result = $sms->sendSMSText('18001358893', '欢迎使用 验证码为1234！');
 
-        return new Response($result);
-    }
+    //     return new Response($result);
+    // }
 }

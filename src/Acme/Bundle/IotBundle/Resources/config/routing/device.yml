@@ -28,3 +28,8 @@ device_new:
     path:     /bind/new/
     defaults: { _controller: "AcmeIotBundle:Device:bind" }
     methods:  [GET, POST]
+
+device_new_user:
+    path:     /bind/user
+    defaults: { _controller: "AcmeIotBundle:Device:getPhones" }
+    methods:  GET

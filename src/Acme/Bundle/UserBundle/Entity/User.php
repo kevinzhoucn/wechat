@@ -40,7 +40,7 @@ class User implements UserInterface, \Serializable
     /**
      * @var array
      */
-private $roles;
+    private $roles;
 
     /**
      * @var array
@@ -73,6 +73,7 @@ private $roles;
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
         $this->devices = new ArrayCollection();
+        $this->phones = new ArrayCollection();
         // $this->createdAt = time();
     }
 
@@ -240,7 +241,13 @@ private $roles;
      */
     public function addPhone($phone)
     {
-        $this->phones[] = $phone;
+        // echo $phone . 'exits: ' . !$this->phones->contains($phone);
+        if(!$this->phones->contains($phone)) {
+            // $this->phones = $this->phones->add($phone);
+            $this->phones->add($phone);
+            // echo 'add phone:' . $phone;
+            // echo implode(',', $this->phones->toArray());
+        }
         return $this;
     }
 
@@ -346,7 +353,7 @@ private $roles;
     public function addDevice(\Acme\Bundle\IotBundle\Entity\Device $device)
     {
         if(!$this->devices->contains($device)) {
-            $this->devices[] = $device;
+            $this->devices->add($device);
         }
 
         return $this;

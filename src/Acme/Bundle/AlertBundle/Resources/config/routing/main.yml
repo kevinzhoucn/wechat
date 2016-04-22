@@ -3,7 +3,7 @@ acme_alert_front:
     defaults:
         _controller: AcmeAlertBundle:Alert:index
 
-# acme_aler_sms:
-#     path: /sms/
-#     defaults:
-#         _controller: AcmeAlertBundle:Alert:sms
+acme_aler_sms:
+    path: /sms/
+    defaults:
+        _controller: AcmeAlertBundle:Alert:sms

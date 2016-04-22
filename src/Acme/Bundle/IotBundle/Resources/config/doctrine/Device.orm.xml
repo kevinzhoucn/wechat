@@ -13,11 +13,21 @@
         </id>
 
         <field name="name" type="string" column="name" length="25" nullable="true"/>
-        <field name="uuid" type="string" column="uuid" length="32" unique="true"/>
+        <field name="sn" type="string" column="sn" length="32" unique="true"/>
+        <field name="model" type="string" column="model" length="32" nullable="true" />
+        <field name="vender" type="string" column="vender" length="32" nullable="true" />
+
+        <field name="nextAlertTime" type="string" column="next_alert_time" length="32" nullable="true" />
 
         <many-to-one field="user" target-entity="Acme\Bundle\UserBundle\Entity\User">
             <join-column name="user_id" referenced-column-name="id" nullable="true" />
         </many-to-one>
+
+        <one-to-many field="datapoints" target-entity="Acme\Bundle\IotBundle\Entity\DataPoint" mapped-by="device" orphan-removal="true">
+            <cascade>
+                <cascade-all />
+            </cascade>
+        </one-to-many>
 
         <field name="createdAt" column="created_at" type="datetime" nullable="true">
             <gedmo:timestampable on="create"/>
