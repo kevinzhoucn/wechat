@@ -77,6 +77,10 @@ class WechatControllerTest extends WebTestCase
         printf("\nTest new user has 3 phone number: \n");
         $this->assertEquals(3, count($user->getPhones()));
         printf("Pass! \n");
+
+        printf("\nTest redirect to success page: \n");
+        $this->assertTrue($client->getResponse()->isRedirect('/iot/device/bind/success/'));
+        printf("Pass! \n");
     }
 
     /**

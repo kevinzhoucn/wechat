@@ -37,8 +37,7 @@ class WechatController extends Controller
 
     public function airkissAction()
     {
-        $wechatParams = $this->getWechatParams();
-
+        $wechatParams = $this->getWechatParams();        
         // return new Response(sprintf("appid: %s, timestamp: %s, nonce: %s, signature: %s", $appid, $timestamp, $nonceStr, $signature));
         return $this->render('AcmeWebBundle:Wechat:airkiss.html.twig', array('wechat' => $wechatParams));
     }
@@ -128,6 +127,7 @@ class WechatController extends Controller
     // public function bindSuccessAction( $sn, $phones )
     public function bindSuccessAction()
     {
+        $url = $this->container->getParameter("");
         $wechatParams = $this->getWechatParams();
         // $userPhone = array_shift($phones);
         // $otherPhones = null;
@@ -147,10 +147,14 @@ class WechatController extends Controller
         return strtolower(preg_replace("/\s+|　/", "", urldecode($str)));
     }
 
-    private function getWechatParams()
+    private function getWechatParams($url = null)
     {
         $webchatApi = $this->container->get('acme.wechat.api');
-        list($appid, $timestamp, $nonceStr, $signature) = $webchatApi->getJsTicketSignatureList();
+        if($url) {
+            list($appid, $timestamp, $nonceStr, $signature) = $webchatApi->getJsTicketSignatureList();
+        } else {
+            list($appid, $timestamp, $nonceStr, $signature) = $webchatApi->getJsTicketListWithUrl($url);
+        }
 
         $ret = array('appid' => $appid, 'timestamp' => $timestamp, 'nonceStr' => $nonceStr, 'signature' => $signature);
         return $ret;
