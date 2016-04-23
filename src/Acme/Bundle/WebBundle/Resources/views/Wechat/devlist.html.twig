@@ -1,0 +1,24 @@
+{% extends 'AcmeWebBundle:Layout:wechat_base.html.twig' %}
+
+{% block title %}我的设备{% endblock %}
+
+{% block body_content %}
+    <div class="container" id="container">
+        <div class="weui_cells_title">绑定设备列表</div>
+        <div class="weui_cells">
+            {% for device in devices %}
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">
+                       <p> {{ device.sn }} </p>
+                    </div>
+                    <div class="weui_cell_ft">
+                       设备
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block body_javascript %}
+{% endblock %}
