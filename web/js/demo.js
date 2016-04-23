@@ -12,6 +12,7 @@
 
   wx.ready(function(){
     $('#startWifi').click(function(){
+      // alert("hello");
       configWiFi();
     });
   });
