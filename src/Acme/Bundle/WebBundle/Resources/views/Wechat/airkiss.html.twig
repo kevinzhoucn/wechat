@@ -17,7 +17,7 @@
       </div>
 
       <div class="action">
-        <button class="btn btn_primary" id="checkDeviceApi">开始配网</button>
+        <button class="btn btn_primary" id="startWifi">开始配网</button>
       </div>
     </div>
 
@@ -30,8 +30,13 @@
           nonceStr: '{{ nonceStr }}',
           signature: '{{ signature }}',
           jsApiList: [
-            'configWXDeviceWiFi'
+            'configWXDeviceWiFi',
+            'scanQRCode'
           ]
+      });
+
+      wx.error(function (res) {
+
       });
     </script>
     <script src="/js/zepto.min.js"></script>
