@@ -150,7 +150,7 @@ class WechatController extends Controller
     private function getWechatParams($url = null)
     {
         $webchatApi = $this->container->get('acme.wechat.api');
-        if($url) {
+        if(!$url) {
             list($appid, $timestamp, $nonceStr, $signature) = $webchatApi->getJsTicketSignatureList();
         } else {
             list($appid, $timestamp, $nonceStr, $signature) = $webchatApi->getJsTicketListWithUrl($url);
