@@ -38,6 +38,6 @@ class WechatController extends Controller
         list($appid, $timestamp, $nonceStr, $signature) = $webchatApi->getJsTicketSignatureList();
 
         // return new Response(sprintf("appid: %s, timestamp: %s, nonce: %s, signature: %s", $appid, $timestamp, $nonceStr, $signature));
-        return $this->render('AcmeWechatBundle:Wechat:airkiss.html.twig', array('appid' => $appid, 'timestamp' => $timestamp, 'nonceStr' => $nonceStr, 'signature' => $signature));
+        return $this->render('AcmeWebBundle:Wechat:airkiss.html.twig', array('appid' => $appid, 'timestamp' => $timestamp, 'nonceStr' => $nonceStr, 'signature' => $signature));
     }
 }

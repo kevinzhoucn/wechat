@@ -4,35 +4,42 @@ html {
   -webkit-user-select: none;
   user-select: none;
 }
+
 body {
   line-height: 1.6;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   background-color: #f1f0f6;
 }
+
 * {
   margin: 0;
   padding: 0;
 }
+
 button {
   font-family: inherit;
   font-size: 100%;
   margin: 0;
   *font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-ul,
-ol {
+
+ul, ol {
   padding-left: 0;
   list-style-type: none;
 }
+
 a {
   text-decoration: none;
 }
+
 .label_box {
   background-color: #ffffff;
 }
+
 .label_item {
   padding-left: 15px;
 }
+
 .label_inner {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -187,3 +194,36 @@ h3:before {
   margin-bottom: 15px;
 }
 
+div .icon {
+  margin-top: 15%;
+}
+
+.icon > div {
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  margin: auto;
+}
+
+.wifi {
+  background-image: url(/img/wifi.png)
+}
+
+.tips {
+  margin: 20px auto;
+  line-height: 30px;
+  text-align: center;
+}
+
+.action {
+  margin-top:10%;
+  background-color: #06be04;
+  border-radius: 4px;
+  height: 40px;
+  text-align: center;
+  color: white;
+  line-height: 40px;
+  font-size: 18px;
+  margin-left: 5%;
+  margin-right: 5%;
+}
