@@ -29,3 +29,8 @@ acme_wechat_device_list:
     path: /api/device/list/
     defaults:
         _controller: AcmeWechatBundle:Wechat:devlist
+
+acme_wechat_bind_user:
+    path: /bind/user/
+    defaults:
+        _controller: AcmeWechatBundle:Wechat:userbind

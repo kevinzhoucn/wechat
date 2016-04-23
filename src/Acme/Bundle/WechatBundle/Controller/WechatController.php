@@ -49,6 +49,8 @@ class WechatController extends Controller
      */
     public function bindAction(Request $request)
     {
+        $openid = $this->getOpenid($request);
+
         $data = array();
         $form = $this->createForm(new BindDeviceType(), $data);
         $form->handleRequest($request);
@@ -58,7 +60,9 @@ class WechatController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $bind_device = $form->getData();
 
-            $username = $this->removeSpace($bind_device['phone']);
+            $username = $openid;
+
+            $phone = $this->removeSpace($bind_device['phone']);
             $device_sn = $this->removeSpace($bind_device['sn']);
 
             $phone1 = $this->removeSpace($bind_device['phone1']);
@@ -80,7 +84,7 @@ class WechatController extends Controller
                 // $user->addPhone($username);
             }
 
-            $phones = array($username);
+            $phones = array($phone);
 
             if($phone1 && strlen($phone1) === 11) {
                 if(!in_array($phone1, $phones)) {
@@ -142,52 +146,142 @@ class WechatController extends Controller
         return $this->render('AcmeWebBundle:Wechat:bind_success.html.twig', array('wechat' => $wechatParams));
     }
 
+    public function userbindAction(Request $request)
+    {
+        $logger = $this->container->get("my_service.logger");
+        $redirect_url = $request->getSchemeAndHttpHost() . $this->generateUrl('device_bind_new');
+
+        $session = $request->getSession();
+        $openid = $session->get('user_openid');
+
+        $logger->info('user bind action: openid from sessoin: ' . !$openid ? 'NULL' : $openid);
+
+        if( !$openid ) {
+            $wechat_auth_url = $this->container->getParameter('wechat_auth_url');
+            $wechat_appid = $this->container->getParameter('wechat_appid');            
+
+            $scope = $this->container->getParameter('wechat_auth_scope_base');
+
+            $wechat_auth_url = sprintf($wechat_auth_url, $wechat_appid, urlencode($redirect_url), $scope, '1234');
+
+            $logger->info('user bind action: build auth url: ' . $wechat_auth_url);
+            $logger->info('user bind action: will redirect to it!');
+            
+            // $wechat_auth_url = sprintf($wechat_auth_url, $wechat_appid, $redirect_url, 'snsapi_userinfo', '1234');
+
+            return $this->redirect($wechat_auth_url);
+        }
+
+        $logger->info('user bind action: get openid from session: ' . $openid);
+        $logger->info('user bind action: will redirect to : ' . $redirect_url);
+
+        return $this->redirect($redirect_url);
+    }
+
     public function mydeviceAction(Request $request)
     {
-        $wechat_auth_url = $this->container->getParameter('wechat_auth_url');
-        $wechat_appid = $this->container->getParameter('wechat_appid');
+        $logger = $this->container->get("my_service.logger"); 
         $redirect_url = $request->getSchemeAndHttpHost() . '/wechat/api/device/list/';
 
-        $scope = $this->container->getParameter('wechat_auth_scope_base');
+        $session = $request->getSession();
+        $openid = $session->get('user_openid');
 
-        $wechat_auth_url = sprintf($wechat_auth_url, $wechat_appid, urlencode($redirect_url), $scope, '1234');
-        
-        // $wechat_auth_url = sprintf($wechat_auth_url, $wechat_appid, $redirect_url, 'snsapi_userinfo', '1234');
+        $logger->info('my device action: openid from sessoin: ' . !$openid ? 'NULL' : $openid);
 
-        return $this->redirect($wechat_auth_url);
+        if( !$openid ) {
+            $wechat_auth_url = $this->container->getParameter('wechat_auth_url');
+            $wechat_appid = $this->container->getParameter('wechat_appid');            
+
+            $scope = $this->container->getParameter('wechat_auth_scope_base');
+
+            $wechat_auth_url = sprintf($wechat_auth_url, $wechat_appid, urlencode($redirect_url), $scope, '1234');
+
+            $logger->info('my device action: build auth url: ' . $wechat_auth_url);
+            $logger->info('my device action: will redirect to it!');
+            
+            // $wechat_auth_url = sprintf($wechat_auth_url, $wechat_appid, $redirect_url, 'snsapi_userinfo', '1234');
+
+            return $this->redirect($wechat_auth_url);
+        }
+
+        $logger->info('my device action: get openid from session: ' . $openid);
+        $logger->info('my device action: will redirect to : ' . $redirect_url);
+
+        return $this->redirect($redirect_url);
         // return new Response($wechat_auth_url);
     }
 
     public function devlistAction(Request $request)
     {
         $logger = $this->container->get("my_service.logger"); 
-        $code = $request->query->get('code');
-        $state = $request->query->get('state');
 
-        $wechat_auth_access_token_url = $this->container->getParameter('wechat_auth_access_token');
-        $wechat_appid = $this->container->getParameter('wechat_appid');
-        $wechat_app_secret = $this->container->getParameter('wechat_appsecret');
+        $openid = $this->getOpenid($request);
+        $logger->info('Devlist action: get openid: ' . !$openid ? 'NULL' : $openid);
 
-        $wechat_auth_access_token_url = sprintf($wechat_auth_access_token_url, $wechat_appid, $wechat_app_secret, $code);
+        if( $openid ) {
+            $logger->info('Devlist action: response list page!');
+            return new Response('Get list page!');
+        } else {
+        // $response = file_get_contents($wechat_auth_access_token_url);
+            $logger->info('Devlist action: response null openid!');
+            return new Response('Openid is null!');
+        }
+        // return $this->redirect($wechat_auth_access_token_url);
+    }
 
-        $logger->info("wechat_auth_access_token_url: " . $wechat_auth_access_token_url);
+    // private function generateCode(Request $request)
+    // {
+    //     $wechat_auth_url = $this->container->getParameter('wechat_auth_url');
+    //     $wechat_appid = $this->container->getParameter('wechat_appid');
+    //     $redirect_url = $request->getUri();
 
-        // $response = $this->redirect($wechat_auth_access_token_url);
-        // $response_content = $response->getContent();
-        $response_content = file_get_contents($wechat_auth_access_token_url);
-        $logger->info("response_content: " . $response_content);
+    //     $scope = $this->container->getParameter('wechat_auth_scope_base');
 
-        $json = json_decode($response_content);
+    //     $wechat_auth_url = sprintf($wechat_auth_url, $wechat_appid, urlencode($redirect_url), $scope, '1234');
 
-        $openid = "null";
-        if(isset($json->{'openid'})) {
-            $openid = $json->{'openid'};
+    //     // return $this->redirect($wechat_auth_url);
+    //     echo $url = $this->generateUrl('homepage');
+    //     return $this->redirect($url);
+    // }
+
+    private function getOpenid(Request $request)
+    {
+        $logger = $this->container->get("my_service.logger"); 
+
+        $session = $request->getSession();
+        $openid = $session->get('user_openid');
+
+        // $logger->info("user open id get from session: " . !$openid ? 'NULL' : $openid );
+        $logger->info("user open id get from session: " . ( !isset($openid) ? 'NULL' : $openid ) );
+
+        if( !$openid ) {
+            if( $request->query->has('code') ) {                
+                $code = $request->query->get('code');
+                $state = $request->query->get('state');
+
+                $wechat_auth_access_token_url = $this->container->getParameter('wechat_auth_access_token');
+                $wechat_appid = $this->container->getParameter('wechat_appid');
+                $wechat_app_secret = $this->container->getParameter('wechat_appsecret');
+
+                $wechat_auth_access_token_url = sprintf($wechat_auth_access_token_url, $wechat_appid, $wechat_app_secret, $code);
+
+                $logger->info("wechat_auth_access_token_url: " . $wechat_auth_access_token_url);
+
+                // $response = $this->redirect($wechat_auth_access_token_url);
+                // $response_content = $response->getContent();
+                $response_content = file_get_contents($wechat_auth_access_token_url);
+                $logger->info("response_content: " . $response_content);
+
+                $json = json_decode($response_content);
+                
+                if(isset($json->{'openid'})) {
+                    $openid = $json->{'openid'};
+                    $session->set('user_openid', $openid);
+                }
+            }
         }
 
-        // $response = file_get_contents($wechat_auth_access_token_url);
-
-        return new Response('Openid:' . $openid);
-        // return $this->redirect($wechat_auth_access_token_url);
+        return $openid;
     }
 
     private function removeSpace($str)

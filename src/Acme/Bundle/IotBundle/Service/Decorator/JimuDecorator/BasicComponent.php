@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class BasicComponent extends IComponent
 {
     public function process()
-    {        
+    {
         return "1," . time() . "random1234567";
     }
 }

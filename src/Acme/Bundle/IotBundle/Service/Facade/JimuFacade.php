@@ -16,10 +16,10 @@ class JimuFacade
     public function handleDeviceRequest()
     {
         $request = $this->container->get('request');
-        echo $request;
+        // echo $request;
 
         $component = new BasicComponent($this->container);
-        $component = new SecurityEncryptDecorator($component, $this->container);
+        $component = new SecurityEncryptDecorator($component);
 
         return $component->process();
     }
