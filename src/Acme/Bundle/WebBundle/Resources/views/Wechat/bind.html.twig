@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <title>绑定设置</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
-    <link rel="stylesheet" href="/css/weui.css">
-    <link rel="stylesheet" href="/css/demo.css">
-  </head>
-  <body>
+{% extends 'AcmeWebBundle:Layout:wechat_base.html.twig' %}
+
+{% block title %}绑定设置{% endblock %}
+
+{% block body_content %}
     <div class="container" id="container">
         <div class="cell">
             <div class="hd">
@@ -53,5 +47,7 @@
             </div>
         </div>
     </div>
-  </body>
-</html>
+{% endblock %}
+
+{% block body_javascript %}
+{% endblock %}

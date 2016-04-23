@@ -23,13 +23,12 @@
 #     defaults: { _controller: "AcmeIotBundle:Device:delete" }
 #     methods:  DELETE
 
-
 device_new:
     path:     /bind/new/
-    defaults: { _controller: "AcmeIotBundle:Device:bind" }
+    defaults: { _controller: "AcmeWechatBundle:Wechat:bind" }
     methods:  [GET, POST]
 
-device_new_user:
-    path:     /bind/user
-    defaults: { _controller: "AcmeIotBundle:Device:getPhones" }
+device_bind_success:
+    path:    /bind/success/
+    defaults: { _controller: "AcmeWechatBundle:Wechat:bindSuccess" }
     methods:  GET
