@@ -43,6 +43,12 @@ class WeChatApi
             $result = "error: signature not matched!";
         }
 
+        $info = sprintf("get request url info: %s", $request->getUri());
+        $this->toLog($info);
+
+        $info = sprintf("get request query info: %s", $request->getQueryString());
+        $this->toLog($info);
+
         $info = sprintf("signature: \"%s\", timestamp: \"%s\", nonce: \"%s\", echostr: \"%s\"", $signature, $timestamp, $nonce, $echoStr);
         $this->toLog($info);
 
