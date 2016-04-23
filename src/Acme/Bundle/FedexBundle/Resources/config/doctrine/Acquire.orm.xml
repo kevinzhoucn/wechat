@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity 
+        table="qomo_acquire"
+        repository-class="Acme\Bundle\FedexBundle\Repository\AcquireRepository" 
+        name="Acme\Bundle\FedexBundle\Entity\Acquire"
+        >
+    <id name="id" type="integer" column="id">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="eventType" type="string" column="event_type" length="25"/>
+    <field name="transactionId" type="string" column="transaction_id" length="25"/>
+    <field name="announceDate" type="string" column="announce_date" length="25"/>
+    <field name="expEffDate" type="string" column="exp_eff_date" length="25" nullable="true"/>
+    <field name="unconditionalDate" type="string" column="unconditional_date" length="25" nullable="true"/>
+    <field name="acqtech" type="string" column="acqtech" length="25" nullable="true"/>
+    <field name="role" type="string" column="role" length="25"/>
+    <field name="companyName" type="string" column="company_name" length="100"/>
+    <field name="flag0" type="string" column="flag0" length="5" nullable="true"/>
+    <field name="country0" type="string" column="country0" length="60"/>
+    <field name="country1" type="string" column="country1" length="60"/>
+    <field name="flag1" type="string" column="flag1" length="5" nullable="true"/>
+    <field name="number1" type="string" column="number1" length="25" nullable="true"/>
+    <field name="number2" type="string" column="number2" length="25" nullable="true"/>
+    <field name="number3" type="string" column="number3" length="25" nullable="true"/>
+    <field name="ric0" type="string" column="ric0" length="25" nullable="true"/>
+    <field name="ric1" type="string" column="ric1" length="25" nullable="true"/>
+    <field name="sedol" type="string" column="sedol" length="50" nullable="true"/>
+    <field name="code0" type="string" column="code0" length="25"/>
+    <field name="code1" type="string" column="code1" length="25" nullable="true"/>
+    <field name="flagType" type="string" column="flag_type" length="25"/>
+    <field name="companyDescription" type="string" column="company_description" length="255" nullable="true"/>
+  </entity>
+</doctrine-mapping>

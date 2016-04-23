@@ -21,3 +21,7 @@ acme_user:
 acme_alert:
     resource: "@AcmeAlertBundle/Resources/config/routing/main.yml"
     prefix:   /alert
+
+acme_fedex:
+    resource: "@AcmeFedexBundle/Resources/config/routing/main.yml"
+    prefix:   /fedex
