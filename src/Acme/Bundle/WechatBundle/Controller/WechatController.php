@@ -35,9 +35,10 @@ class WechatController extends Controller
         return new Response($result);
     }
 
-    public function airkissAction()
+    public function airkissAction(Request $request)
     {
-        $wechatParams = $this->getWechatParams();        
+        $url = $request->getUri();
+        $wechatParams = $this->getWechatParams($url);
         // return new Response(sprintf("appid: %s, timestamp: %s, nonce: %s, signature: %s", $appid, $timestamp, $nonceStr, $signature));
         return $this->render('AcmeWebBundle:Wechat:airkiss.html.twig', array('wechat' => $wechatParams));
     }
