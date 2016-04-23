@@ -76,7 +76,7 @@ class DeviceController extends Controller
             $em->persist($user);
             $em->flush();
 
-            echo $info = 'Bind success: ' . implode(',', $user->getPhones()->toArray());
+            echo $info = 'Success: ' . implode(',', $user->getPhones()->toArray());
             // $info .= 'User devices total: ' . count($user->getDevices());
             // $info .= 'User phones total: ' . count($user->getPhones());
             
@@ -85,7 +85,7 @@ class DeviceController extends Controller
             // return $this->redirectToRoute('device_show', array('id' => $device->getId()));
         }
 
-        return $this->render('AcmeIotBundle:Device:bind.html.twig', array(
+        return $this->render('AcmeWebBundle:Wechat:bind.html.twig', array(
                              'device' => $data,
                              'form' => $form->createView(),
                             ));
