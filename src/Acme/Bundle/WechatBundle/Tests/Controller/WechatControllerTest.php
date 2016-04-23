@@ -31,19 +31,41 @@ class WechatControllerTest extends WebTestCase
     public function testAirKiss()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '//');
-    }
-
-    public function testBindUser()
-    {
-        
-        $client = static::createClient();
         $crawler = $client->request('GET', '/wechat/api/airkiss/');
 
         printf("\nTest wechat device api airkiss: \n" . $client->getRequest()->getUri() . "\n");
         $this->assertEquals(
                             200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
                             $client->getResponse()->getStatusCode());
+        printf("Pass! \n");
+    }
+
+    public function testBindUser()
+    {
+        
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/iot/device/bind/new/');
+
+        printf("\nTest device bind new form: \n" . $client->getRequest()->getUri() . "\n");
+        $this->assertEquals(1, $crawler->filter('form')->count());
+
+        $form = $crawler->selectButton('提交')->form();
+
+        // first time add one phone
+        $username = $form['bind_device[phone]'] = '18000000001';
+        $sn = $form['bind_device[sn]'] = 'sn1234567';
+        $crawler = $client->submit($form);
+
+        printf("\nTest new user creat from form: \n");
+        $username = '18000000001';
+        $user = $this->em
+                     ->getRepository('AcmeUserBundle:User')
+                     ->findOneBy(array('username' => $username));
+        $this->assertEquals(false, !$user);
+        printf("Pass! \n");
+
+        printf("\nTest new user has 1 phone number: \n");
+        $this->assertEquals(1, count($user->getPhones()));
         printf("Pass! \n");
     }
 

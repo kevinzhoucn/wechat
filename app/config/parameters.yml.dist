@@ -53,8 +53,10 @@ parameters:
     wechat_access_token_file: "%kernel.root_dir%/data/weixin_access_token"
     wechat_js_ticket_file: "%kernel.root_dir%/data/weixin_js_ticket"
     wechat_js_ticket_url: "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
+    wechat_auth_url: "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect"
+    wechat_auth_scope_base: 'snsapi_base'
     # wechat_js_signature_url: "http://mp.weixin.qq.com?params=value"
-    # wechat_js_bind_success_url: "http://mp.weixin.qq.com?params=value"
+    # wechat_js_bind_success_url: "http://mp.weixin.qq.com?params=value"    
 
     sms_platform_url: "http://sms_platform_url"
     sms_txt_account: "account1"
