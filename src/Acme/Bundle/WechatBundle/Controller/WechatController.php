@@ -35,9 +35,10 @@ class WechatController extends Controller
         return new Response($result);
     }
 
-    public function airkissAction()
+    public function airkissAction(Request $request)
     {
-        $wechatParams = $this->getWechatParams();        
+        $url = $request->getUri();
+        $wechatParams = $this->getWechatParams($url);
         // return new Response(sprintf("appid: %s, timestamp: %s, nonce: %s, signature: %s", $appid, $timestamp, $nonceStr, $signature));
         return $this->render('AcmeWebBundle:Wechat:airkiss.html.twig', array('wechat' => $wechatParams));
     }
@@ -125,10 +126,9 @@ class WechatController extends Controller
     }
 
     // public function bindSuccessAction( $sn, $phones )
-    public function bindSuccessAction()
+    public function bindSuccessAction(Request $request)
     {
-        $url = $this->container->getParameter("wechat_js_bind_success_url");
-        $wechatParams = $this->getWechatParams($url);
+        $wechatParams = $this->getWechatParams($request->getUri());
         // $userPhone = array_shift($phones);
         // $otherPhones = null;
 
@@ -142,19 +142,63 @@ class WechatController extends Controller
         return $this->render('AcmeWebBundle:Wechat:bind_success.html.twig', array('wechat' => $wechatParams));
     }
 
+    public function mydeviceAction(Request $request)
+    {
+        $wechat_auth_url = $this->container->getParameter('wechat_auth_url');
+        $wechat_appid = $this->container->getParameter('wechat_appid');
+        $redirect_url = $request->getSchemeAndHttpHost() . '/wechat/api/device/list/';
+
+        $scope = $this->container->getParameter('wechat_auth_scope_base');
+
+        $wechat_auth_url = sprintf($wechat_auth_url, $wechat_appid, urlencode($redirect_url), $scope, '1234');
+        
+        // $wechat_auth_url = sprintf($wechat_auth_url, $wechat_appid, $redirect_url, 'snsapi_userinfo', '1234');
+
+        return $this->redirect($wechat_auth_url);
+        // return new Response($wechat_auth_url);
+    }
+
+    public function devlistAction(Request $request)
+    {
+        $logger = $this->container->get("my_service.logger"); 
+        $code = $request->query->get('code');
+        $state = $request->query->get('state');
+
+        $wechat_auth_access_token_url = $this->container->getParameter('wechat_auth_access_token');
+        $wechat_appid = $this->container->getParameter('wechat_appid');
+        $wechat_app_secret = $this->container->getParameter('wechat_appsecret');
+
+        $wechat_auth_access_token_url = sprintf($wechat_auth_access_token_url, $wechat_appid, $wechat_app_secret, $code);
+
+        $logger->info("wechat_auth_access_token_url: " . $wechat_auth_access_token_url);
+
+        // $response = $this->redirect($wechat_auth_access_token_url);
+        // $response_content = $response->getContent();
+        $response_content = file_get_contents($wechat_auth_access_token_url);
+        $logger->info("response_content: " . $response_content);
+
+        $json = json_decode($response_content);
+
+        $openid = "null";
+        if(isset($json->{'openid'})) {
+            $openid = $json->{'openid'};
+        }
+
+        // $response = file_get_contents($wechat_auth_access_token_url);
+
+        return new Response('Openid:' . $openid);
+        // return $this->redirect($wechat_auth_access_token_url);
+    }
+
     private function removeSpace($str)
     {
         return strtolower(preg_replace("/\s+|　/", "", urldecode($str)));
     }
 
-    private function getWechatParams($url = null)
+    private function getWechatParams($url)
     {
         $webchatApi = $this->container->get('acme.wechat.api');
-        if(!$url) {
-            list($appid, $timestamp, $nonceStr, $signature) = $webchatApi->getJsTicketSignatureList();
-        } else {
-            list($appid, $timestamp, $nonceStr, $signature) = $webchatApi->getJsTicketListWithUrl($url);
-        }
+        list($appid, $timestamp, $nonceStr, $signature) = $webchatApi->getJsTicketListWithUrl($url);
 
         $ret = array('appid' => $appid, 'timestamp' => $timestamp, 'nonceStr' => $nonceStr, 'signature' => $signature);
         return $ret;

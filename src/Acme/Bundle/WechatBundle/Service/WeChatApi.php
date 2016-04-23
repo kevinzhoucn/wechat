@@ -21,7 +21,7 @@ class WeChatApi
         $this->logger = $this->container->get("my_service.logger");
 
         $this->appid = $this->container->getParameter("wechat_appid");
-        $this->jsTicketSignatureUrl = $this->container->getParameter("wechat_js_signature_url");
+        $this->jsTicketSignatureUrl = "";
     }
 
     public function checkSignatureValid(Request $request)

@@ -19,3 +19,13 @@ acme_webchat_js_signature:
     path: /api/airkiss/
     defaults:
         _controller: AcmeWechatBundle:Wechat:airkiss
+
+acme_wechat_mydevice:
+    path: /api/mydevice/
+    defaults:
+        _controller: AcmeWechatBundle:Wechat:mydevice
+
+acme_wechat_device_list:
+    path: /api/device/list/
+    defaults:
+        _controller: AcmeWechatBundle:Wechat:devlist

@@ -12,6 +12,8 @@ class WechatControllerTest extends WebTestCase
      */
     private $em;
 
+    private $client;
+
     /**
      * {@inheritDoc}
      */
@@ -22,6 +24,20 @@ class WechatControllerTest extends WebTestCase
         $this->em = static::$kernel->getContainer()
             ->get('doctrine')
             ->getManager();
+
+        $this->client = static::createClient();
+    }
+
+    public function testAirKiss()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/wechat/api/airkiss/');
+
+        printf("\nTest wechat device api airkiss: \n" . $client->getRequest()->getUri() . "\n");
+        $this->assertEquals(
+                            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+                            $client->getResponse()->getStatusCode());
+        printf("Pass! \n");
     }
 
     public function testBindUser()
@@ -80,7 +96,17 @@ class WechatControllerTest extends WebTestCase
 
         printf("\nTest redirect to success page: \n");
         $this->assertTrue($client->getResponse()->isRedirect('/iot/device/bind/success/'));
+
+        $crawler = $client->request('GET', '/iot/device/bind/success/');        
+        $this->assertEquals(
+                            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+                            $client->getResponse()->getStatusCode());
         printf("Pass! \n");
+    }
+
+    public function testBindSuccess()
+    {
+        // $crawler = $this->client->request('GET', '/iot/device/bind/success/');        
     }
 
     /**

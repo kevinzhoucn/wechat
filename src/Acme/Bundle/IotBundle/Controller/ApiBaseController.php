@@ -23,4 +23,10 @@ class ApiBaseController extends Controller
         $sec_str = $security->decrypt($str_pack);
         return new Response($sec_str);
     }
+
+    public function testDecoratorAction()
+    {
+        $jimu = $this->container->get('acme.iot.facade.jimu');
+        return new Response($jimu->handleDeviceRequest());
+    }
 }
