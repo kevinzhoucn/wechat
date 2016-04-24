@@ -66,6 +66,35 @@ class ApiV11ControllerTest extends WebTestCase
     }
 
     /**
+     * @dataProvider getSendStrings
+     */
+    public function testApiV11ObserverSend($string, $key)
+    {
+        printf("\nTest Observer send request: \n");
+        static::bootKernel();
+        $security = static::$kernel->getContainer()->get('acme.iot.security');
+        $encryptStr = $security->encryptAlert($string);
+
+        printf("\nTest Security encrypt string:" . $encryptStr . "\n");
+        printf("\nTest Security original string: %s", $string);
+
+        $client = static::createClient();
+        $crawler = $client->request('GET', 
+                                    'iotdev/v1.1/send?' . $encryptStr
+                                    );
+
+        $result = $this->removeSpace($client->getResponse()->getContent());
+        $correct_result = preg_match('/^result:[A-Za-z0-9]{10,}/i', $result);        
+
+        printf("\nTest Correct response format:\n" . $result . "\n");
+        $this->assertEquals(true, $correct_result);
+
+        $result_code = explode(':', $result)[1];
+        $decryptResult = $security->decryptAlert($result_code);
+        printf("Test Response code:\n" . $decryptResult . "\n");
+    }
+
+    /**
      * @dataProvider getIncorrectDecrptStrings
      */
     public function testApiV11IncorrectSend($string, $key)
@@ -137,6 +166,16 @@ class ApiV11ControllerTest extends WebTestCase
         return array(
                     array('4bc5c93b9647d2ad9c80d9406acd9671e5267678588bcda8e714d1b5d0629b425934e243538feb102441c7a594e0159fb3f1d585afa5dc920accce9167607607114c46111b5069fe3377a0e2dea639acd176af2e18e17e24203888e6f744964f412283a9',
                           'Wrongkey')
+        );
+    }
+
+    public function getSendStrings()
+    {
+        return array(
+                    array('sn=asdf12345&value=1-10-1461041182123_2-20-1461041182123&vender=jimupai&model=JMA01&random=1c2a448f15ce5149',
+                          'TTuuIvb76TY123Ki'),
+                    array('sn=asdf12345&value=1-0-1461041182123_2-0-1461041182123&vender=jimupai&model=JMA01&random=1c2a448f15ce5149',
+                          'TTuuIvb76TY123Ki')
         );
     }
 
