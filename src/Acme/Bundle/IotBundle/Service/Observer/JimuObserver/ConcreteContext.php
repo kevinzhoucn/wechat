@@ -11,6 +11,8 @@ class ConcreteContext
 
     // Use traits or compositer
     private $entityManager;
+    private $queryString;
+    private $decryptQueryString;
 
     public function __construct(ContainerInterface $container)
     {
@@ -20,7 +22,49 @@ class ConcreteContext
 
     private function init()
     {
-        $this->entityManager = $this->container->getDoctrine()->getManager();
+        $this->entityManager = $this->container->get('doctrine')->getManager();
+        // $this->queryString = $this->container->get('request')->getQueryString();
+    }
+
+    public function getQueryString()
+    {
+        return $this->queryString;
+    }
+
+    public function setDecryptQueryString($decryptQueryString)
+    {
+        $this->decryptQueryString = $decryptQueryString;
+    }
+
+    public function getDecryptQueryString()
+    {
+        return $this->decryptQueryString;
+    }
+
+    public function buildQueryArray($queryStr = null)
+    {
+        $tempArray = array();
+        $queryString = null;
+
+        if($queryString) {
+            $queryString = $queryStr;
+        } else {
+            if($this->decryptQueryString) {
+                $queryString = $this->decryptQueryString;
+            }
+        }
+
+        if($queryString && strpos($queryString, "&") && strpos($queryString, "=")) {
+            $tempArray = explode('&', $queryString);
+            foreach ($tempArray as $chunk) {
+                $param = explode("=", $chunk);
+                if ($param) {
+                    $tempArray[$param[0]] = $param[1];
+                }
+            }
+        }
+
+        return $tempArray;
     }
 
     public function getEntityManager()
@@ -30,8 +74,10 @@ class ConcreteContext
 
     public function getOrCreateNewDevice($sn)
     {
-        $device = $em->getRepository('AcmeIotBundle:Device')->findOneBy(array('sn' => $sn));
-        if(!device){
+        if(!$sn) return null;
+        
+        $device = $this->entityManager->getRepository('AcmeIotBundle:Device')->findOneBy(array('sn' => $sn));
+        if(!$device){
             $device = new Device();
         }
 
@@ -44,6 +90,19 @@ class ConcreteContext
             $this->entityManager->persist($datapoint);
 
             $em->flush();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function saveItemArrayToDB($items = array())
+    {
+        if(count($items) > 0) {
+            foreach ($items as $item) {
+                $this->entityManager->persist($item);
+            }
+            $this->entityManager->flush();
             return true;
         } else {
             return false;

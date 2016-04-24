@@ -19,6 +19,6 @@ class SecurityEncryptDecorator extends Decorator
         $proess_result = $this->component->process();
         $security = $this->container->get('acme.iot.security');
 
-        return $security->encryptAlert($proess_result);
+        return 'result:' . $security->encryptAlert($proess_result);
     }
 }

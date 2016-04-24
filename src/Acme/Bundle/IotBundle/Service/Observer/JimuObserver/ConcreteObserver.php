@@ -4,7 +4,7 @@ namespace Acme\Bundle\IotBundle\Service\Observer\JimuObserver;
 
 abstract class ConcreteObserver implements \SplObserver
 {
-    private $subject;
+    protected $subject;
     public function __construct(\SplSubject $subject)
     {
         $this->subject = $subject;

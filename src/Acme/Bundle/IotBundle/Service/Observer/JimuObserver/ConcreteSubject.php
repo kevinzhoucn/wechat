@@ -1,14 +1,16 @@
 <?php
 
 namespace Acme\Bundle\IotBundle\Service\Observer\JimuObserver;
+use Acme\Bundle\IotBundle\Service\Observer\JimuObserver\ConcreteContext;
 
 class ConcreteSubject implements \SplSubject
 {
     private $observers;
     private $context;
 
-    public function __construct() {
+    public function __construct(ConcreteContext $context) {
         $this->observers = new \SplObjectStorage();
+        $this->context = $context;
     }
 
     public function attach(\SplObserver $observer) {
@@ -25,8 +27,13 @@ class ConcreteSubject implements \SplSubject
         }
     }
 
-    public function setContext($context)
+    public function getContext()
     {
-        $this->context = $context;
+        return $this->context;
     }
+
+    // public function setContext($context)
+    // {
+    //     $this->context = $context;
+    // }
 }

@@ -90,6 +90,20 @@ class ApiV11ControllerTest extends WebTestCase
         printf("Test Response code:\n" . $decryptResult . "\n");
     }
 
+    /**
+     * @dataProvider getDecrptStrings
+     */
+    public function testApiV11Observer($string, $key, $expected_string)
+    {
+        printf("\nTest ApiV11 Observer:\n");
+        $client = static::createClient();
+        $crawler = $client->request('GET', 
+                                    '/api/test/decorator/?' . $string
+                                    );
+        $client->getResponse()->getContent();
+    }
+
+
     public function getEncrptStrings()
     {
         return array(
