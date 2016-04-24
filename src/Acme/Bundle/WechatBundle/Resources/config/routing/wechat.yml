@@ -34,3 +34,8 @@ acme_wechat_bind_user:
     path: /bind/user/
     defaults:
         _controller: AcmeWechatBundle:Wechat:userbind
+
+acme_wechat_device_show:
+    path: /api/device/show/{sn}
+    defaults:
+        _controller: AcmeWechatBundle:Wechat:showDev
