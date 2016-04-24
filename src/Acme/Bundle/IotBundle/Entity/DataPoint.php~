@@ -34,6 +34,12 @@ class DataPoint
      */
     private $deletedAt;
 
+    public function __construct()
+    {
+        // $this->datapoints = new ArrayCollection();
+        // $this->createdAt = time();
+    }
+
     /**
      * Get id
      *
