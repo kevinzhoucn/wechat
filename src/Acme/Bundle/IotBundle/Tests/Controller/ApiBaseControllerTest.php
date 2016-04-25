@@ -14,7 +14,8 @@ class ApiBaseControllerTest extends WebTestCase
         $test_time = time();
         $response_time = $client->getResponse()->getContent();
 
-        $print_str = printf("\ntime now: %s, response time: %s", $test_time, $response_time);
+        printf("\nTest case api for check date:");
+        $print_str = printf("\ntime now: %s, response time: %s\n", $test_time, $response_time);
         // echo $print_str;
 
         $diff = abs($test_time - $response_time) <= 5;

@@ -22,84 +22,16 @@ class ApiV11Controller extends Controller
         $decryptStr = $security->decryptAlert($query);
         $logger->info("received decrypt data: " . $decryptStr);
 
-        $device = $datapoint = $sn = $model = $vender = $data = $random = $timestamp = null;
-        $alert = null;
+        $queryStr = explode('&', $decryptStr);
+        $result = 'result:';
+        $result_code = '';
 
-        $em = $this->getDoctrine()->getManager();
-
-        foreach (explode('&', $decryptStr) as $chunk) {
-            $param = explode("=", $chunk);
-
-            if ($param) {                
-                // printf("Value for parameter \"%s\" is \"%s\"<br/>\n", $this->removeSpace($param[0]), $this->removeSpace($param[1]));
-                // echo $this->removeSpace($param[0]) . '</br>';
-                switch ($this->removeSpace($param[0])) {
-                    case 'sn':
-                        $sn = $this->removeSpace($param[1]);
-                        // echo $sn . '</br>';
-                        break;
-                    case 'model':
-                        $model = $this->removeSpace($param[1]);
-                        // echo $model . '</br>';
-                        break;
-                    case 'vender':
-                        $vender = $this->removeSpace($param[1]);
-                        // echo $vender . '</br>';
-                        break;
-                    case 'random':
-                        $random = $this->removeSpace($param[1]);
-                        // echo $random . '</br>';
-                        break;
-                    case 'value':
-                        $data = $this->removeSpace($param[1]);
-                        $alert = $this->checkIfAlert($data);
-                        // echo $data . '</br>';
-                        // $timestamp = time();
-                        break;
-                }
-            }            
+        if($queryStr && strpos($decryptStr, "&") && strpos($decryptStr, "=")) {
+            $result_code = $this->getSuccessResult($logger, $queryStr);
+        } else {
+            $result_code = "1," . time() . ",,";
         }
-
-        $device = $em->getRepository('AcmeIotBundle:Device')->findOneBy(array('sn' => $sn));
-
-        // echo $sn . '</br>';
-        // var_dump($device);
-
-        if(!$device) {
-            $device = new Device();
-            $device->setName($sn);
-            $device->setSn($sn);
-            $device->setModel($model);
-            $device->setVender($vender);
-        }
-
-        if($data) {
-            $datapoint = new DataPoint();
-            $datapoint->setData($data);
-            $device->addDatapoint($datapoint);            
-        }
-
-        if($device && $datapoint) {
-            if($alert) {
-                $logger->info("trigger alert!");
-                // if(true) {
-                if($device->getNextAlertTime() < time()) {
-                    $this->sendAlert($device);
-                    $device->setNextAlertTime(time() + 300);
-                    $logger->info("set alert " . $device->getNextAlertTime());
-                } else {
-                    $logger->info("time now: " . time() . "get alert " . $device->getNextAlertTime());
-                }
-            }
-
-            $em->persist($datapoint);
-            $em->persist($device);
-
-            $em->flush();
-        }
-
-        $result = "result:";
-        $result_code = "0, " . time() . ", " . $random;
+        
         $encryptStr = $security->encryptAlert($result_code);
 
         $logger->info("response data: " . $result_code . " encrypt data: " . $encryptStr);
@@ -151,12 +83,92 @@ class ApiV11Controller extends Controller
         $result = 'empty';
 
         if(strlen($mobiles) > 10) {
-            $result = $sms->sendSMSText($mobiles, $content);            
+            // $result = $sms->sendSMSText($mobiles, $content);            
             $logger->info("send message to mobiles: " . $mobiles . ", result: " .$result);
         }
 
         // echo 'platform give response: ' . $result . '</br>';
 
         return $result;
+    }
+
+    private function getSuccessResult($logger, $queryStr)
+    {
+        $device = $datapoint = $sn = $model = $vender = $data = $random = $timestamp = null;
+        $alert = null;
+
+        $em = $this->getDoctrine()->getManager();
+
+        foreach ($queryStr as $chunk) {
+            $param = explode("=", $chunk);
+
+            if ($param) {                
+                // printf("Value for parameter \"%s\" is \"%s\"<br/>\n", $this->removeSpace($param[0]), $this->removeSpace($param[1]));
+                // echo $this->removeSpace($param[0]) . '</br>';
+                switch ($this->removeSpace($param[0])) {
+                    case 'sn':
+                        $sn = $this->removeSpace($param[1]);
+                        // echo $sn . '</br>';
+                        break;
+                    case 'model':
+                        $model = $this->removeSpace($param[1]);
+                        // echo $model . '</br>';
+                        break;
+                    case 'vender':
+                        $vender = $this->removeSpace($param[1]);
+                        // echo $vender . '</br>';
+                        break;
+                    case 'random':
+                        $random = $this->removeSpace($param[1]);
+                        // echo $random . '</br>';
+                        break;
+                    case 'value':
+                        $data = $this->removeSpace($param[1]);
+                        $alert = $this->checkIfAlert($data);
+                        // echo $data . '</br>';
+                        // $timestamp = time();
+                        break;
+                }
+            }            
+        }
+
+        $device = $em->getRepository('AcmeIotBundle:Device')->findOneBy(array('sn' => $sn));
+
+        if(!$device) {
+            $device = new Device();
+            $device->setName($sn);
+            $device->setSn($sn);
+            $device->setModel($model);
+            $device->setVender($vender);
+        }
+
+        if($data) {
+            $datapoint = new DataPoint();
+            $datapoint->setData($data);
+            $device->addDatapoint($datapoint);            
+        }
+
+        if($device && $datapoint) {
+            if($alert) {
+                $logger->info("trigger alert!");
+                // if(true) {
+                if($device->getNextAlertTime() < time()) {
+                    $this->sendAlert($device);
+                    $device->setNextAlertTime(time() + 300);
+                    $logger->info("set alert " . $device->getNextAlertTime());
+                } else {
+                    $logger->info("time now: " . time() . "get alert " . $device->getNextAlertTime());
+                }
+            }
+
+            $em->persist($datapoint);
+            $em->persist($device);
+
+            $em->flush();
+        }
+
+        $result_code = "0," . time() . "," . $random;
+
+        return $result_code;
     }
 }
