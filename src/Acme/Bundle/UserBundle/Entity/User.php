@@ -73,7 +73,8 @@ class User implements UserInterface, \Serializable
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
         $this->devices = new ArrayCollection();
-        $this->phones = new ArrayCollection();
+        // $this->phones = new ArrayCollection();
+        $this->phones = array();
         // $this->createdAt = time();
     }
 
@@ -239,17 +240,21 @@ class User implements UserInterface, \Serializable
      * @param  $phone
      * @return User
      */
-    public function addPhone($phone)
-    {
-        // echo $phone . 'exits: ' . !$this->phones->contains($phone);
-        if(!$this->phones->contains($phone)) {
-            // $this->phones = $this->phones->add($phone);
-            $this->phones->add($phone);
-            // echo 'add phone:' . $phone;
-            // echo implode(',', $this->phones->toArray());
-        }
-        return $this;
-    }
+    // public function addPhone($phone)
+    // {
+    //     // echo $phone . 'exits: ' . !$this->phones->contains($phone);
+    //     // if(!$this->phones->contains($phone)) {
+    //     //     // $this->phones = $this->phones->add($phone);
+    //     //     $this->phones->add($phone);
+    //     //     // echo 'add phone:' . $phone;
+    //     //     // echo implode(',', $this->phones->toArray());
+    //     // }
+
+    //     if(!in_array($phone, $this->phones)) {
+    //         $this->phones[] = $phone;
+    //     }
+    //     return $this;
+    // }
 
     /**
      * Set phones
@@ -272,6 +277,11 @@ class User implements UserInterface, \Serializable
     public function getPhones()
     {
         return $this->phones;
+    }
+
+    public function getPhoneString()
+    {
+        return implode(',', $this->phones);
     }
 
     /**

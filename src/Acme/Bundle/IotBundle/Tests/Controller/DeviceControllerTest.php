@@ -3,9 +3,92 @@
 namespace Acme\Bundle\IotBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Acme\Bundle\UserBundle\Entity\User;
 
-// class DeviceControllerTest extends WebTestCase
-// {
+class DeviceControllerTest extends WebTestCase
+{
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    private $em;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp()
+    {
+        self::bootKernel();
+
+        $this->em = static::$kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
+    }
+
+    public function testBindUser()
+    {
+        
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/iot/device/bind/new/');
+
+        printf("\nTest device bind new form: \n" . $client->getRequest()->getUri() . "\n");
+        $this->assertEquals(1, $crawler->filter('form')->count());
+
+        $form = $crawler->selectButton('提交')->form();
+
+        // first time add one phone
+        $username = $form['bind_device[phone]'] = '18000000001';
+        $sn = $form['bind_device[sn]'] = 'sn1234567';
+        $crawler = $client->submit($form);
+
+        printf("\nTest new user creat from form: \n");
+        $username = '18000000001';
+        $user = $this->em
+                     ->getRepository('AcmeUserBundle:User')
+                     ->findOneBy(array('username' => $username));
+        $this->assertEquals(false, !$user);
+        printf("Pass! \n");
+
+        printf("\nTest new user has 1 phone number: \n");
+        $this->assertEquals(1, count($user->getPhones()));
+        printf("Pass! \n");
+    }
+
+    public function testAddMorePhones()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/iot/device/bind/new/');
+
+        $form = $crawler->selectButton('提交')->form();
+        $username = $form['bind_device[phone]'] = '18000000001';
+        $sn = $form['bind_device[sn]'] = 'sn1234567';
+        $phone1 = $form['bind_device[phone1]'] = '18000000002';
+        $phone2 = $form['bind_device[phone2]'] = '18000000003';
+
+        $crawler = $client->submit($form);
+
+        printf("\nTest new user creat from form: \n");
+        $username = '18000000001';
+        $user = $this->em
+                     ->getRepository('AcmeUserBundle:User')
+                     ->findOneBy(array('username' => $username));
+        $this->assertEquals(false, !$user);
+        printf("Pass! \n");
+
+        printf("\nTest new user has 3 phone number: \n");
+        $this->assertEquals(3, count($user->getPhones()));
+        printf("Pass! \n");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $this->em->close();
+    }
+
 //     // public function testReceiveData()
 //     // {
 //     //     $client = static::createClient();
@@ -59,4 +142,4 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 //     }
 
     
-// }
+}

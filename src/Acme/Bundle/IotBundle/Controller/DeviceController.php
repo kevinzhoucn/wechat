@@ -53,16 +53,25 @@ class DeviceController extends Controller
             if(!$user) {
                 $user = new User();
                 $user->setUsername($username);
-                $user->addPhone($username);
+                // $user->addPhone($username);
             }
 
+            $phones = array($username);
+
             if($phone1 && strlen($phone1) === 11) {
-                $user->addPhone($phone1);
+                if(!in_array($phone1, $phones)) {
+                    $phones[] = $phone1;
+                }
             }
 
             if($phone2 && strlen($phone2) === 11) {
-                $user->addPhone($phone2);
+                // $user->addPhone($phone2);
+                if(!in_array($phone2, $phones)) {
+                    $phones[] = $phone2;
+                }
             }
+
+            $user->setPhones($phones);
 
             if(!$device) {
                 $device = new Device();
@@ -76,7 +85,7 @@ class DeviceController extends Controller
             $em->persist($user);
             $em->flush();
 
-            echo $info = 'Success: ' . implode(',', $user->getPhones()->toArray());
+            echo $info = 'Success: ' . $user->getPhoneString();
             // $info .= 'User devices total: ' . count($user->getDevices());
             // $info .= 'User phones total: ' . count($user->getPhones());
             
@@ -95,10 +104,10 @@ class DeviceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('AcmeUserBundle:User')
-                   ->findOneBy(array('username' => '18516982079'));
+                   ->findOneBy(array('username' => '18000000011'));
 
-        $result = implode(',', $user->getPhones()->toArray());
-        echo count($user->getPhones()->toArray()) . '</br>';
+        $result = $user->getPhoneString();
+        echo count($user->getPhones()) . '</br>';
         echo count($user->getDevices()->toArray()) . '</br>';
         return new Response($result);
     }
