@@ -54,6 +54,7 @@ parameters:
     wechat_js_ticket_file: "%kernel.root_dir%/data/weixin_js_ticket"
     wechat_js_ticket_url: "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
     wechat_js_signature_url: "http://mp.weixin.qq.com?params=value"
+    wechat_js_bind_success_url: "http://mp.weixin.qq.com?params=value"
 
     sms_platform_url: "http://sms_platform_url"
     sms_txt_account: "account1"

@@ -113,11 +113,21 @@ class WeChatApi
 
     public function getJsTicketSignatureList()
     {
+        return $this->getJsTicketList($this->jsTicketSignatureUrl);
+    }
+
+    public function getJsTicketListWithUrl($url)
+    {
+        return $this->getJsTicketList($url);
+    }
+
+    private function getJsTicketList($js_ticket_url)
+    {
         $nonce_str = $this->getRandChar(16);
         $timestamp = time();
         $appid = $this->appid;
         $js_ticket = $this->getJsTicket();
-        $js_ticket_signature_url = $this->jsTicketSignatureUrl;
+        $js_ticket_signature_url = $js_ticket_url;
 
         $param_array = array('noncestr=' . $nonce_str, 'jsapi_ticket=' . $js_ticket, 'timestamp=' . $timestamp, 'url=' . $js_ticket_signature_url);        
         sort($param_array, SORT_STRING);
