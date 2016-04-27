@@ -1,41 +1,27 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <title>WiFi配置</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
-    <link rel="stylesheet" href="/css/style_wechat.css">
-  </head>
-  <body ontouchstart="">
-    <div class="wxapi_container">
-      <div class="icon">
-        <div class="wifi"></div>
-      </div>
-      <div class="tips">
-        <span class="desc">确定手机已连接WiFi</span>
-      </div>
+{% extends 'AcmeWebBundle:Layout:wechat_base.html.twig' %}
 
-      <div class="action">
-        <button class="btn btn_primary" id="startWifi">开始配网</button>
-      </div>
+{% block title %}WiFi配置{% endblock %}
+
+{% block head_stylesheet %}
+  <link rel="stylesheet" href="/css/style_wechat.css">
+{% endblock %}    
+
+{% block body_content %}
+  <div class="wxapi_container">
+    <div class="icon">
+      <div class="wifi"></div>
+    </div>
+    <div class="tips">
+      <span class="desc">确定手机已连接WiFi</span>
     </div>
 
-    <script src="/js/jweixin-1.0.0.js"></script>    
-    <script src="/js/zepto.min.js"></script>
+    <div class="action">
+      <button class="btn btn_primary" id="startWifi">开始配网</button>
+    </div>
+  </div>
+{% endblock %}
 
-    <script>
-      wx.config({
-          debug: false,
-          appId: '{{ appid }}',
-          timestamp: {{ timestamp }},
-          nonceStr: '{{ nonceStr }}',
-          signature: '{{ signature }}',
-          jsApiList: [
-            'configWXDeviceWiFi'
-          ]
-      });
-    </script>    
-    <script src="/js/app_wifi.js"> </script>
-  </body>
-</html>
+{% block body_javascript %}
+  {{ parent() }}  
+  <script src="/js/app_wifi.js"> </script>
+{% endblock %}

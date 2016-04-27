@@ -1,6 +1,6 @@
 <?php
 
-namespace Acme\Bundle\IotBundle\Form;
+namespace Acme\Bundle\WechatBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
