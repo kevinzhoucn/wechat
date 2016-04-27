@@ -128,7 +128,7 @@ class WechatController extends Controller
     public function bindSuccessAction()
     {
         $url = $this->container->getParameter("wechat_js_bind_success_url");
-        $wechatParams = $this->getWechatParams();
+        $wechatParams = $this->getWechatParams($url);
         // $userPhone = array_shift($phones);
         // $otherPhones = null;
 
