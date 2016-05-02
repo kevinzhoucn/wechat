@@ -166,7 +166,7 @@ class WechatController extends Controller
 
         $wechat_auth_access_token_url = $this->container->getParameter('wechat_auth_access_token');
         $wechat_appid = $this->container->getParameter('wechat_appid');
-        $wechat_app_secret = $this->container->getParameter('wechat_appid');
+        $wechat_app_secret = $this->container->getParameter('wechat_appsecret');
 
         $wechat_auth_access_token_url = sprintf($wechat_auth_access_token_url, $wechat_appid, $wechat_app_secret, $code);
 
