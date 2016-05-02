@@ -172,8 +172,9 @@ class WechatController extends Controller
 
         $logger->info("wechat_auth_access_token_url: " . $wechat_auth_access_token_url);
 
-        $response = $this->redirect($wechat_auth_access_token_url);
-        $response_content = $response->getContent();
+        // $response = $this->redirect($wechat_auth_access_token_url);
+        // $response_content = $response->getContent();
+        $response_content = file_get_contents($wechat_auth_access_token_url)
         $logger->info("response_content: " . $response_content);
 
         $json = json_decode($response_content);
