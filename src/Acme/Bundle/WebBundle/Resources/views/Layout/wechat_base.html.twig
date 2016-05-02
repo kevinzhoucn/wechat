@@ -11,25 +11,11 @@
     {% endblock %}
     {% block head_javascript %}{% endblock %}
   </head>
-  <body>
+  <body ontouchstart>
     {% block body_content %}{% endblock %}
     {% block body_javascript %}
       <script src="/js/jweixin-1.0.0.js"></script>
       <script src="/js/zepto.min.js"></script>
-
-      <script>
-        wx.config({
-            debug: false,
-            appId: '{{ wechat.appid }}',
-            timestamp: {{ wechat.timestamp }},
-            nonceStr: '{{ wechat.nonceStr }}',
-            signature: '{{ wechat.signature }}',
-            jsApiList: [
-              'configWXDeviceWiFi',
-              'closeWindow'
-            ]
-        });
-      </script>
     {% endblock %}
   </body>
 </html>

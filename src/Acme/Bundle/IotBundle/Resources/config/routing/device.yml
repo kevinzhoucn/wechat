@@ -23,7 +23,7 @@
 #     defaults: { _controller: "AcmeIotBundle:Device:delete" }
 #     methods:  DELETE
 
-device_new:
+device_bind_new:
     path:     /bind/new/
     defaults: { _controller: "AcmeWechatBundle:Wechat:bind" }
     methods:  [GET, POST]

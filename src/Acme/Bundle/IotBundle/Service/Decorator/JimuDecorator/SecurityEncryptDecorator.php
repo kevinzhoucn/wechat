@@ -4,14 +4,14 @@ namespace Acme\Bundle\IotBundle\Service\Decorator\JimuDecorator;
 
 use Acme\Bundle\IotBundle\Service\Decorator\Decorator;
 use Acme\Bundle\IotBundle\Service\Decorator\IComponent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class SecurityEncryptDecorator extends Decorator
 {
-    public function __construct(IComponent $component, ContainerInterface $container)
+    // Remember assign container to class
+    public function __construct(IComponent $component)
     {
         $this->component = $component;
-        parent::__construct($container);
+        $this->container = $this->component->container;
     }
 
     public function process()

@@ -40,8 +40,8 @@ class LoadFixtures implements FixtureInterface, ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
-        $this->loadUsers($manager);
-        $this->loadPosts($manager);
+        // $this->loadUsers($manager);
+        // $this->loadPosts($manager);
     }
 
     private function loadUsers(ObjectManager $manager)

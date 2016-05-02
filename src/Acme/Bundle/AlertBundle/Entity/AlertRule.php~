@@ -1,0 +1,82 @@
+<?php
+
+namespace Acme\Bundle\AlertBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * AlertRule
+ */
+class AlertRule
+{
+    /**
+     * @var int
+     */
+    private $id;
+
+    /**
+     * @var string
+     */
+    private $alertRule;
+
+    /**
+     * @var string
+     */
+    private $informRule;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set alertRule
+     *
+     * @param string $alertRule
+     * @return AlertRule
+     */
+    public function setAlertRule($alertRule)
+    {
+        $this->alertRule = $alertRule;
+
+        return $this;
+    }
+
+    /**
+     * Get alertRule
+     *
+     * @return string 
+     */
+    public function getAlertRule()
+    {
+        return $this->alertRule;
+    }
+
+    /**
+     * Set informRule
+     *
+     * @param string $informRule
+     * @return AlertRule
+     */
+    public function setInformRule($informRule)
+    {
+        $this->informRule = $informRule;
+
+        return $this;
+    }
+
+    /**
+     * Get informRule
+     *
+     * @return string 
+     */
+    public function getInformRule()
+    {
+        return $this->informRule;
+    }
+}

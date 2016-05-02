@@ -1,6 +1,7 @@
 <?php
 
 namespace Acme\Bundle\IotBundle\Service\Decorator;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class IComponent
 {

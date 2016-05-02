@@ -12,4 +12,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class DeviceRepository extends EntityRepository
 {
+    public function findOneBySnJoinedToUser($deviceSn, $userName)
+    {
+        $query = $this->getEntityManager()
+                      ->createQuery(
+                            'SELECT d FROM AcmeIotBundle:Device d
+                             JOIN d.user u
+                             WHERE d.sn = :sn AND u.username = :username
+                            '
+                        )
+                      ->setParameter('sn', $deviceSn)
+                      ->setParameter('username', $userName);
+        try {
+            return $query->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
 }

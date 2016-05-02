@@ -333,4 +333,42 @@ class Device
 
         return $mobiles;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $alert_rules;
+
+
+    /**
+     * Add alert_rules
+     *
+     * @param \Acme\Bundle\AlertBundle\Entity\AlertRule $alertRules
+     * @return Device
+     */
+    public function addAlertRule(\Acme\Bundle\AlertBundle\Entity\AlertRule $alertRules)
+    {
+        $this->alert_rules[] = $alertRules;
+
+        return $this;
+    }
+
+    /**
+     * Remove alert_rules
+     *
+     * @param \Acme\Bundle\AlertBundle\Entity\AlertRule $alertRules
+     */
+    public function removeAlertRule(\Acme\Bundle\AlertBundle\Entity\AlertRule $alertRules)
+    {
+        $this->alert_rules->removeElement($alertRules);
+    }
+
+    /**
+     * Get alert_rules
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAlertRules()
+    {
+        return $this->alert_rules;
+    }
 }

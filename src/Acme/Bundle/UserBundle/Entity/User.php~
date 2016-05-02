@@ -4,6 +4,7 @@ namespace Acme\Bundle\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * User
@@ -30,6 +31,37 @@ class User implements UserInterface, \Serializable
      */
     private $email;
 
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $devices;
+
+    /**
+     * @var array
+     */
+    private $roles;
+
+    /**
+     * @var array
+     */
+    private $phones;
+
+    /**
+     * @var \DateTime
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    /**
+     * @var \DateTime
+     */
+    private $deletedAt;
+
     /**
      * @var bool
      */
@@ -40,6 +72,10 @@ class User implements UserInterface, \Serializable
         $this->isActive = true;
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
+        $this->devices = new ArrayCollection();
+        // $this->phones = new ArrayCollection();
+        $this->phones = array();
+        // $this->createdAt = time();
     }
 
     /**
@@ -183,30 +219,6 @@ class User implements UserInterface, \Serializable
             // $this->salt
         ) = unserialize($serialized);
     }
-    /**
-     * @var array
-     */
-    private $roles;
-
-    /**
-     * @var array
-     */
-    private $phones;
-
-    /**
-     * @var \DateTime
-     */
-    private $createdAt;
-
-    /**
-     * @var \DateTime
-     */
-    private $updatedAt;
-
-    /**
-     * @var \DateTime
-     */
-    private $deletedAt;
 
 
     /**
@@ -228,11 +240,21 @@ class User implements UserInterface, \Serializable
      * @param  $phone
      * @return User
      */
-    public function addPhone($phone)
-    {
-        $this->phones[] = $phone;
-        return $this;
-    }
+    // public function addPhone($phone)
+    // {
+    //     // echo $phone . 'exits: ' . !$this->phones->contains($phone);
+    //     // if(!$this->phones->contains($phone)) {
+    //     //     // $this->phones = $this->phones->add($phone);
+    //     //     $this->phones->add($phone);
+    //     //     // echo 'add phone:' . $phone;
+    //     //     // echo implode(',', $this->phones->toArray());
+    //     // }
+
+    //     if(!in_array($phone, $this->phones)) {
+    //         $this->phones[] = $phone;
+    //     }
+    //     return $this;
+    // }
 
     /**
      * Set phones
@@ -255,6 +277,11 @@ class User implements UserInterface, \Serializable
     public function getPhones()
     {
         return $this->phones;
+    }
+
+    public function getPhoneString()
+    {
+        return implode(',', $this->phones);
     }
 
     /**
@@ -324,5 +351,41 @@ class User implements UserInterface, \Serializable
     public function getDeletedAt()
     {
         return $this->deletedAt;
+    }
+
+
+    /**
+     * Add devices
+     *
+     * @param \Acme\Bundle\IotBundle\Entity\Device $devices
+     * @return User
+     */
+    public function addDevice(\Acme\Bundle\IotBundle\Entity\Device $device)
+    {
+        if(!$this->devices->contains($device)) {
+            $this->devices->add($device);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove devices
+     *
+     * @param \Acme\Bundle\IotBundle\Entity\Device $devices
+     */
+    public function removeDevice(\Acme\Bundle\IotBundle\Entity\Device $device)
+    {
+        $this->devices->removeElement($device);
+    }
+
+    /**
+     * Get devices
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDevices()
+    {
+        return $this->devices;
     }
 }

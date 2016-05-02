@@ -41,6 +41,11 @@ class Device
     private $datapoints;
 
     /**
+     * @var string
+     */
+    private $nextAlertTime;    
+
+    /**
      * @var \DateTime
      */
     private $createdAt;
@@ -259,5 +264,73 @@ class Device
     public function getVender()
     {
         return $this->vender;
+    }
+
+    /**
+     * Set next alert time
+     *
+     * @param string $nextAlertTime
+     * @return Device
+     */
+    public function setNextAlertTime($nextAlertTime)
+    {
+        $this->nextAlertTime = $nextAlertTime;
+
+        return $this;
+    }
+
+    /**
+     * Get nextAlertTime
+     *
+     * @return string 
+     */
+    public function getNextAlertTime()
+    {
+        return $this->nextAlertTime;
+    }
+
+    /**
+     * Add datapoints
+     *
+     * @param \Acme\Bundle\IotBundle\Entity\DataPoint $datapoints
+     * @return Device
+     */
+    public function addDatapoint(\Acme\Bundle\IotBundle\Entity\DataPoint $datapoint)
+    {
+        $this->datapoints[] = $datapoint;
+
+        return $this;
+    }
+
+    /**
+     * Remove datapoints
+     *
+     * @param \Acme\Bundle\IotBundle\Entity\DataPoint $datapoints
+     */
+    public function removeDatapoint(\Acme\Bundle\IotBundle\Entity\DataPoint $datapoint)
+    {
+        $this->datapoints->removeElement($datapoint);
+    }
+
+    /**
+     * Get datapoints
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDatapoints()
+    {
+        return $this->datapoints;
+    }
+
+    public function getAlertMobiles()
+    {
+        $mobiles = "";
+
+        if($this->user) {
+            // echo count($this->user->getPhones()->toArray());
+            $mobiles = implode(',', $this->user->getPhones()->toArray());
+        }
+
+        return $mobiles;
     }
 }
