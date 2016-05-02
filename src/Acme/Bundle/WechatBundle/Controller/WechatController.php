@@ -171,10 +171,18 @@ class WechatController extends Controller
         $wechat_auth_access_token_url = sprintf($wechat_auth_access_token_url, $wechat_appid, $wechat_app_secret, $code);
 
         $logger->info("wechat_auth_access_token_url: " . $wechat_auth_access_token_url);
+        $response = $this->redirect($wechat_auth_access_token_url);
+        $response_content = $response->getContent();
+        $json = json_decode($response_content);
+
+        $openid = "null";
+        if(isset($json->{'openid'})) {
+            $openid = $json->{'openid'};
+        }
 
         // $response = file_get_contents($wechat_auth_access_token_url);
 
-        return new Response('Response:' . $wechat_auth_access_token_url);
+        return new Response('Openid:' . $openid);
         // return $this->redirect($wechat_auth_access_token_url);
     }
 
