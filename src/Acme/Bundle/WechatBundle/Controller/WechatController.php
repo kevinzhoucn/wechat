@@ -160,6 +160,7 @@ class WechatController extends Controller
 
     public function devlistAction(Request $request)
     {
+        $logger = $this->container->get("my_service.logger"); 
         $code = $request->query->get('code');
         $state = $request->query->get('state');
 
@@ -169,10 +170,12 @@ class WechatController extends Controller
 
         $wechat_auth_access_token_url = sprintf($wechat_auth_access_token_url, $wechat_appid, $wechat_app_secret, $code);
 
+        $logger->info("wechat_auth_access_token_url: " . $wechat_auth_access_token_url);
+
         // $response = file_get_contents($wechat_auth_access_token_url);
 
-        // return new Response('Response:' . $response);
-        return $this->redirect($wechat_auth_access_token_url);
+        return new Response('Response:' . $wechat_auth_access_token_url);
+        // return $this->redirect($wechat_auth_access_token_url);
     }
 
     private function removeSpace($str)
