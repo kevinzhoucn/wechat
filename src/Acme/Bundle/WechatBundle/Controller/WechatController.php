@@ -169,9 +169,10 @@ class WechatController extends Controller
 
         $wechat_auth_access_token_url = sprintf($wechat_auth_access_token_url, $wechat_appid, $wechat_app_secret, $code);
 
-        $response = file_get_contents($wechat_auth_access_token_url);
+        // $response = file_get_contents($wechat_auth_access_token_url);
 
-        return new Response('Response:' . $response);
+        // return new Response('Response:' . $response);
+        return $this->redirect($wechat_auth_access_token_url);
     }
 
     private function removeSpace($str)
