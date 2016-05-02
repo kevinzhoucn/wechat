@@ -8,6 +8,8 @@ use Acme\Bundle\IotBundle\Service\Decorator\JimuDecorator\SecurityEncryptDecorat
 
 class JimuFacade
 {
+    private $container;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
