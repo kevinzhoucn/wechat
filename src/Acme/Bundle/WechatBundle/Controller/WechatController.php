@@ -163,7 +163,15 @@ class WechatController extends Controller
         $code = $request->query->get('code');
         $state = $request->query->get('state');
 
-        return new Response('Device list, code:' . $code . ', state:' . $state);
+        $wechat_auth_access_token_url = $this->container->getParameter('wechat_auth_access_token');
+        $wechat_appid = $this->container->getParameter('wechat_appid');
+        $wechat_app_secret = $this->container->getParameter('wechat_appid');
+
+        $wechat_auth_access_token_url = sprintf($wechat_auth_access_token_url, $wechat_appid, $wechat_app_secret, $code);
+
+        $response = file_get_contents($wechat_auth_access_token_url);
+
+        return new Response('Response:' . $response);
     }
 
     private function removeSpace($str)

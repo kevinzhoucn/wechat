@@ -55,6 +55,7 @@ parameters:
     wechat_js_ticket_url: "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
     wechat_auth_url: "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect"
     wechat_auth_scope_base: 'snsapi_base'
+    wechat_auth_access_token: "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%%s&secret=%%s&code=%%s&grant_type=authorization_code"
     # wechat_js_signature_url: "http://mp.weixin.qq.com?params=value"
     # wechat_js_bind_success_url: "http://mp.weixin.qq.com?params=value"    
 
