@@ -147,14 +147,15 @@ class WechatController extends Controller
         $wechat_auth_url = $this->container->getParameter('wechat_auth_url');
         $wechat_appid = $this->container->getParameter('wechat_appid');
         $redirect_url = $request->getSchemeAndHttpHost() . '/wechat/api/device/list/';
+
         $scope = $this->container->getParameter('wechat_auth_scope_base');
 
-        $wechat_auth_url = sprintf($wechat_auth_url, $wechat_appid, $redirect_url, $scope, '1234');
+        $wechat_auth_url = sprintf($wechat_auth_url, $wechat_appid, urlencode($redirect_url), $scope, '1234');
         
         // $wechat_auth_url = sprintf($wechat_auth_url, $wechat_appid, $redirect_url, 'snsapi_userinfo', '1234');
 
-        return $this->redirect($wechat_auth_url);
-        // return new Response($wechat_auth_url);
+        // return $this->redirect($wechat_auth_url);
+        return new Response($wechat_auth_url);
     }
 
     public function devlistAction(Request $request)
