@@ -17,6 +17,7 @@
     <parameters>
         <parameter key="acme.iot.security.class">Acme\Bundle\IotBundle\Service\Security</parameter>
         <parameter key="acme.iot.security.xxtea.class">Acme\Bundle\IotBundle\Service\SecurityStrategy\XxteaStrategy</parameter>
+        <parameter key="acme.iot.facade.jimu.class">Acme\Bundle\IotBundle\Service\Facade\JimuFacade</parameter>
     </parameters>
 
     <services>
@@ -25,6 +26,10 @@
         </service>
 
         <service id="acme.iot.security.xxtea" class="%acme.iot.security.xxtea.class%">
+        </service>
+
+        <service id="acme.iot.facade.jimu" class="%acme.iot.facade.jimu.class%">
+            <argument type="service" id="service_container" />
         </service>
     </services>
 </container>
