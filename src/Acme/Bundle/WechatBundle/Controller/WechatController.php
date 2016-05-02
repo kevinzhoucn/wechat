@@ -160,8 +160,8 @@ class WechatController extends Controller
 
     public function devlistAction(Request $request)
     {
-        $code = $request->query('code');
-        $state = $request->query('state');
+        $code = $request->query->get('code');
+        $state = $request->query->get('state');
 
         return new Response('Device list, code:' . $code . ', state:' . $state);
     }
