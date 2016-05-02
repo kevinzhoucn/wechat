@@ -79,4 +79,61 @@ class AlertRule
     {
         return $this->informRule;
     }
+
+    /**
+     * @var \Acme\Bundle\UserBundle\Entity\User
+     */
+    private $user;
+
+    /**
+     * @var \Acme\Bundle\IotBundle\Entity\Device
+     */
+    private $device;
+
+
+    /**
+     * Set user
+     *
+     * @param \Acme\Bundle\UserBundle\Entity\User $user
+     * @return AlertRule
+     */
+    public function setUser(\Acme\Bundle\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Acme\Bundle\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set device
+     *
+     * @param \Acme\Bundle\IotBundle\Entity\Device $device
+     * @return AlertRule
+     */
+    public function setDevice(\Acme\Bundle\IotBundle\Entity\Device $device = null)
+    {
+        $this->device = $device;
+
+        return $this;
+    }
+
+    /**
+     * Get device
+     *
+     * @return \Acme\Bundle\IotBundle\Entity\Device 
+     */
+    public function getDevice()
+    {
+        return $this->device;
+    }
 }

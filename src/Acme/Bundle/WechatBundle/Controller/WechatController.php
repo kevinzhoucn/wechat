@@ -300,7 +300,7 @@ class WechatController extends Controller
                 $tempRules = explode('||', $alertItemRule);
                 foreach ($tempRules as $chunk) {
                     $tempSingleRule = explode(':', $chunk);
-                    if($tempSingleRule[0] === '1') {
+                    if($tempSingleRule[0] === '0') {
                         if($tempSingleRule[1] === 'Y') {
                             $dataAlertRule['channel1'] = true;
                         } else {
@@ -308,7 +308,7 @@ class WechatController extends Controller
                         }
                     }
 
-                    if($tempSingleRule[0] === '2') {
+                    if($tempSingleRule[0] === '1') {
                         if($tempSingleRule[1] === 'Y') {
                             $dataAlertRule['channel2'] = true;
                         } else {
@@ -316,7 +316,7 @@ class WechatController extends Controller
                         }
                     }
 
-                    if($tempSingleRule[0] === '3') {
+                    if($tempSingleRule[0] === '10') {
                         if($tempSingleRule[1] === 'Y') {
                             $dataAlertRule['channel3'] = true;
                         } else {
@@ -374,25 +374,25 @@ class WechatController extends Controller
             $alertRule = '';
             $channel1 = $alertData['channel1'];
             if($channel1) {
+                $alertRule = $alertRule . '0:Y';
+            } else {
+                $alertRule = $alertRule . '0:N';
+            }
+            $alertRule = $alertRule . '||';
+
+            $channel2 = $alertData['channel2'];
+            if($channel2) {
                 $alertRule = $alertRule . '1:Y';
             } else {
                 $alertRule = $alertRule . '1:N';
             }
             $alertRule = $alertRule . '||';
 
-            $channel2 = $alertData['channel2'];
-            if($channel2) {
-                $alertRule = $alertRule . '2:Y';
-            } else {
-                $alertRule = $alertRule . '2:N';
-            }
-            $alertRule = $alertRule . '||';
-
             $channel3 = $alertData['channel3'];
             if($channel3) {
-                $alertRule = $alertRule . '3:Y';
+                $alertRule = $alertRule . '10:Y';
             } else {
-                $alertRule = $alertRule . '3:N';
+                $alertRule = $alertRule . '10:N';
             }
 
             $informRule = '';

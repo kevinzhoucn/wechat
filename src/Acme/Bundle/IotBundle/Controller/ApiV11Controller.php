@@ -10,6 +10,12 @@ use Acme\Bundle\IotBundle\Entity\DataPoint;
 
 class ApiV11Controller extends Controller
 {
+    private $deviceSn;
+    private $deviceAlertRule;
+    private $deviceInformRule;
+    private $deviceAlertMessage;
+    private $apiLogger;
+
     public function sendAction(Request $request)
     {
         // $sn = $request->get('sn');
@@ -28,6 +34,7 @@ class ApiV11Controller extends Controller
 
         if($queryStr && strpos($decryptStr, "&") && strpos($decryptStr, "=")) {
             $result_code = $this->getSuccessResult($logger, $queryStr);
+            // $result_code = "1," . time() . ",,";
         } else {
             $result_code = "1," . time() . ",,";
         }
@@ -51,14 +58,35 @@ class ApiV11Controller extends Controller
     private function checkIfAlert($data)
     {
         $alert = null;
+        $this->deviceAlertMessage = '';
         foreach (explode('_', $data) as $chunk) {
-            $param = explode("-", $chunk);
+            $param = explode('-', $chunk);
 
             if($param) {
                 $num = $this->removeSpace($param[1]);
+                $channel = $this->removeSpace($param[0]);
                 // echo $num;
                 if($num === 0 or $num === '0') {
-                    $alert = true;
+                    $alertRule = $this->deviceAlertRule;
+                    if($alertRule) {
+                        $tempRules = explode('||', $alertRule);
+
+                        foreach ($tempRules as $chunk) {
+                            $tempSingleRule = explode(':', $chunk);
+                            $this->getLogger()->info(sprintf('Check if Alert: single rule, channle: %s, value: %s', $tempSingleRule[0], $tempSingleRule[1]));
+                            if($tempSingleRule[0] === $channel) {
+                                if($tempSingleRule[1] === 'Y') {
+                                    $alert = true;
+                                    if($channel === '0') {
+                                        $this->deviceAlertMessage .= '0.报警信号！';
+                                    }
+                                    if($channel === '1') {
+                                        $this->deviceAlertMessage .= '1.测试信号！';
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -83,6 +111,29 @@ class ApiV11Controller extends Controller
         $result = 'empty';
 
         if(strlen($mobiles) > 10) {
+            $informRule = $this->deviceInformRule;
+
+            if($informRule) {
+                $tempRules = explode('||', $informRule);
+
+                foreach ($tempRules as $chunk) {
+                    $tempSingleRule = explode(':', $chunk);
+                    $this->getLogger()->info(sprintf('Check inform rule: single rule, method: %s, value: %s', $tempSingleRule[0], $tempSingleRule[1]));
+                    if($tempSingleRule[0] === 'sms') {
+                        if($tempSingleRule[1] === 'Y') {
+                            $logger->info('Got alert: send sms');
+                           $result = $sms->sendSMSText($mobiles, $content);
+                        }
+                    }
+                    if($tempSingleRule[0] === 'voice') {
+                        if($tempSingleRule[1] === 'Y') {
+                            $logger->info('Got alert: send voice');
+                            $result = $sms->sendSMSVoice($mobiles, $content);
+                        }
+                    }
+                }
+            }
+
             // $result = $sms->sendSMSText($mobiles, $content);            
             $logger->info("send message to mobiles: " . $mobiles . ", result: " .$result);
         }
@@ -108,6 +159,7 @@ class ApiV11Controller extends Controller
                 switch ($this->removeSpace($param[0])) {
                     case 'sn':
                         $sn = $this->removeSpace($param[1]);
+                        $this->setAlertRules($sn);
                         // echo $sn . '</br>';
                         break;
                     case 'model':
@@ -170,5 +222,41 @@ class ApiV11Controller extends Controller
         $result_code = "0," . time() . "," . $random;
 
         return $result_code;
+    }
+
+    private function setAlertRules($sn)
+    {
+        if(!$sn) {
+            return null;
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        // echo 'I am SN' . $sn;
+
+        $alertItem = $em->getRepository('AcmeAlertBundle:AlertRule')->findOneBySnJoinedToDevice($sn);
+        // $alertItem = $em->getRepository('AcmeAlertBundle:AlertRule')->find(1);
+
+        if($alertItem) {
+            $this->getLogger()->info('Get alert item:');
+            $this->deviceAlertRule = $alertItem->getAlertRule();
+            $this->deviceInformRule = $alertItem->getInformRule();
+            $this->getLogger()->info('Alert item -- alert rule:' . $this->deviceAlertRule);
+            $this->getLogger()->info('Alert item -- alert inform rule:');
+            $this->getLogger()->info($this->deviceAlertRule);
+            return true;
+        } else {
+            $this->getLogger()->info('Alert item -- empty!');
+            return null;
+        }
+    }
+
+    private function getLogger()
+    {
+        if(!$this->apiLogger) {
+            $this->apiLogger = $this->container->get("my_service.logger");
+        }
+
+        return $this->apiLogger;
     }
 }
