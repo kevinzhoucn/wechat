@@ -9,11 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace AppBundle\DataFixtures\ORM;
+namespace Acme\Bundle\FedexBundle\DataFixtures\ORM;
 
-use AppBundle\Entity\User;
-use AppBundle\Entity\Post;
-use AppBundle\Entity\Comment;
+use Acme\Bundle\FedexBundle\Entity\Acquire;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -27,8 +25,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * See http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html
  *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 class LoadFixtures implements FixtureInterface, ContainerAwareInterface
 {
@@ -42,6 +38,31 @@ class LoadFixtures implements FixtureInterface, ContainerAwareInterface
     {
         // $this->loadUsers($manager);
         // $this->loadPosts($manager);
+        $this->loadData($manager);
+    }
+
+    private function loadData(ObjectManager $manager)
+    {
+        // $datafile = %kernel.root_dir%/data/project.sqlite
+        $datafile = $this->container->getParameter('kernel.root_dir') . '/data/test.csv';        
+        // echo $datafile;
+
+        $row = 1;
+        if(($handle = fopen($datafile, "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ";")) !== FALSE ) {
+                $num = count($data);
+                echo "$num fields in line $row:\n";
+                if($num === 22) {
+                    for ($c = 0; $c < $num; $c++) {
+                        // echo $data[$c] . "__";
+                    }                    
+                }
+
+                $row++;
+            }
+
+            fclose($handle);
+        }
     }
 
     private function loadUsers(ObjectManager $manager)

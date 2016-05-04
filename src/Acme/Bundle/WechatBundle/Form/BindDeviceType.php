@@ -14,9 +14,9 @@ class BindDeviceType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('phone')
+        $builder            
             ->add('sn')
+            ->add('phone')
             ->add('phone1', null, array('required' => false))
             ->add('phone2', null, array('required' => false))
         ;
