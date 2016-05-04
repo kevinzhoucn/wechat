@@ -186,7 +186,7 @@ class WechatController extends Controller
         $session = $request->getSession();
         $openid = $session->get('user_openid');
 
-        $logger->info('my device action: openid from sessoin: ' . !$openid ? 'NULL' : $openid);
+        $logger->info('my device action: openid from sessoin: ' . ( !$openid ? 'NULL' : $openid) );
 
         if( !$openid ) {
             $wechat_auth_url = $this->container->getParameter('wechat_auth_url');
@@ -216,15 +216,34 @@ class WechatController extends Controller
         $logger = $this->container->get("my_service.logger"); 
 
         $openid = $this->getOpenid($request);
-        $logger->info('Devlist action: get openid: ' . !$openid ? 'NULL' : $openid);
+
+        // $openid = "od8M9wBOnFNrtkp9oJw3PgiVdT_I";
+        $logger->info('Devlist action: get openid: ' . ( !$openid ? 'NULL' : $openid) );
 
         if( $openid ) {
             $logger->info('Devlist action: response list page!');
-            return new Response('Get list page!');
+
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository('AcmeUserBundle:User')
+                       ->findOneBy(array('username' => $openid));
+
+            $devices = array();
+
+            if($user) {
+                $devices = $user->getDevices();
+            }
+
+            return $this->render('AcmeWebBundle:Wechat:devlist.html.twig', 
+                                 array('devices' => $devices)
+                                );
+
+            // return new Response('Get list page!');
         } else {
         // $response = file_get_contents($wechat_auth_access_token_url);
-            $logger->info('Devlist action: response null openid!');
-            return new Response('Openid is null!');
+            $logger->info('Devlist action Error: response null openid!');
+
+            return $this->render('AcmeWebBundle:Wechat:devnull.html.twig');
+            // return new Response('Error: Openid is null!');
         }
         // return $this->redirect($wechat_auth_access_token_url);
     }
