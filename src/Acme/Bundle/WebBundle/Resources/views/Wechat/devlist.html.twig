@@ -12,7 +12,9 @@
                        <p> {{ device.sn }} </p>
                     </div>
                     <div class="weui_cell_ft">
-                       设备
+                        <a href="{{ path('acme_wechat_device_show', {'sn' : device.sn}) }}">
+                            <i class="weui_icon_info_circle"></i>
+                        </a>
                     </div>
                 </div>
             {% endfor %}

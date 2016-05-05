@@ -218,6 +218,8 @@ class WechatController extends Controller
         $openid = $this->getOpenid($request);
 
         // $openid = "od8M9wBOnFNrtkp9oJw3PgiVdT_I";
+        // $session = $request->getSession()->set("user_openid", $openid);
+
         $logger->info('Devlist action: get openid: ' . ( !$openid ? 'NULL' : $openid) );
 
         if( $openid ) {
@@ -246,6 +248,30 @@ class WechatController extends Controller
             // return new Response('Error: Openid is null!');
         }
         // return $this->redirect($wechat_auth_access_token_url);
+    }
+
+    public function showDevAction(Request $request, $sn)
+    {
+        $username = $request->getSession()->get("user_openid");
+
+        // $em = $this->getDoctrine()->getManager();
+        // $user = $em->getRepository('AcmeUserBundle:User')
+        //            ->findOneBy(array('username' => $openid));
+
+        // // $user_id = $user->getId();
+        // // $device = $em->getRepository('AcmeIotBundle:Device')
+        // //              ->findOneBy(array('user_id' => $user_id, 'sn' => $sn));
+        // $device = $user->getDevices()->findOneBy(array('sn' => $sn));
+
+        $device = $this->getDoctrine()
+                       ->getRepository('AcmeIotBundle:Device')
+                       ->findOneBySnJoinedToUser($sn, $username);
+
+        if($device) {
+            return $this->render('AcmeWebBundle:Wechat:devshow.html.twig', array('device' => $device));
+        } else {
+            return $this->render('AcmeWebBundle:Wechat:devnull.html.twig');
+        }
     }
 
     // private function generateCode(Request $request)
