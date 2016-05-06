@@ -6,8 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Acme\Bundle\WechatBundle\Form\BindDeviceType;
+use Acme\Bundle\WechatBundle\Form\AlertSetType;
 use Acme\Bundle\UserBundle\Entity\User;
 use Acme\Bundle\IotBundle\Entity\Device;
+use Acme\Bundle\AlertBundle\Entity\AlertRule;
 
 class WechatController extends Controller
 {
@@ -50,6 +52,9 @@ class WechatController extends Controller
     public function bindAction(Request $request)
     {
         $openid = $this->getOpenid($request);
+
+        // $openid = "od8M9wBOnFNrtkp9oJw3PgiVdT_I";
+        // $session = $request->getSession()->set("user_openid", $openid);
 
         $data = array();
         $form = $this->createForm(new BindDeviceType(), $data);
@@ -120,7 +125,10 @@ class WechatController extends Controller
             $logger->info($info);
 
             // return $this->redirectToRoute('device_show', array('id' => $device->getId()));            
-            return $this->redirectToRoute('device_bind_success');
+
+            $deviceShowUrl = $this->generateUrl('acme_wechat_device_show', array('sn' => $device->getSn()));
+            return $this->redirect($deviceShowUrl);
+            // return $this->redirectToRoute('device_bind_success');
         }
 
         return $this->render('AcmeWebBundle:Wechat:bind.html.twig', array(
@@ -263,12 +271,168 @@ class WechatController extends Controller
         // //              ->findOneBy(array('user_id' => $user_id, 'sn' => $sn));
         // $device = $user->getDevices()->findOneBy(array('sn' => $sn));
 
+        $alertItem = $this->getDoctrine()
+                       ->getRepository('AcmeAlertBundle:AlertRule')
+                       ->findOneBySnJoinedToUser($sn, $username);
+
         $device = $this->getDoctrine()
                        ->getRepository('AcmeIotBundle:Device')
                        ->findOneBySnJoinedToUser($sn, $username);
 
+        $user = $this->getDoctrine()
+                     ->getRepository('AcmeUserBundle:User')
+                     ->findOneBy(array('username' => $username));
+
+        $data = array();
+        $dataAlertRule = array();
+        $dataAlertInformRule = array();
+        
+        if(!$alertItem) {
+            $alertItem = new AlertRule();
+            $alertItem->setUser($user);
+            $alertItem->setDevice($device);
+            $data = array('channel1' => false, 'channel2' => false, 'channel3' => false, 'wechat' => false, 'sms' => false, 'voice' => false);
+        } else {
+            $alertItemRule = $alertItem->getAlertRule();
+            if(!($alertItemRule && strpos($alertItemRule, ":") && strpos($alertItemRule, "||"))) {
+                $dataAlertRule = array('channel1' => false, 'channel2' => false, 'channel3' => false);    
+            } else {
+                $tempRules = explode('||', $alertItemRule);
+                foreach ($tempRules as $chunk) {
+                    $tempSingleRule = explode(':', $chunk);
+                    if($tempSingleRule[0] === '1') {
+                        if($tempSingleRule[1] === 'Y') {
+                            $dataAlertRule['channel1'] = true;
+                        } else {
+                            $dataAlertRule['channel1'] = false;
+                        }
+                    }
+
+                    if($tempSingleRule[0] === '2') {
+                        if($tempSingleRule[1] === 'Y') {
+                            $dataAlertRule['channel2'] = true;
+                        } else {
+                            $dataAlertRule['channel2'] = false;
+                        }
+                    }
+
+                    if($tempSingleRule[0] === '3') {
+                        if($tempSingleRule[1] === 'Y') {
+                            $dataAlertRule['channel3'] = true;
+                        } else {
+                            $dataAlertRule['channel3'] = false;
+                        }
+                    }
+                }
+            }
+
+            $alertItemInformRule = $alertItem->getInformRule();
+            if(!($alertItemInformRule && strpos($alertItemInformRule, ":") && strpos($alertItemInformRule, "||"))) {
+                $dataAlertInformRule = array('wechat' => false, 'sms' => false, 'voice' => false);    
+            } else {
+                $tempRules = explode('||', $alertItemInformRule);
+                foreach ($tempRules as $chunk) {
+                    $tempSingleRule = explode(':', $chunk);
+                    if($tempSingleRule[0] === 'wechat') {
+                        if($tempSingleRule[1] === 'Y') {
+                            $dataAlertInformRule['wechat'] = true;
+                        } else {
+                            $dataAlertInformRule['wechat'] = false;
+                        }
+                    }
+
+                    if($tempSingleRule[0] === 'sms') {
+                        if($tempSingleRule[1] === 'Y') {
+                            $dataAlertInformRule['sms'] = true;
+                        } else {
+                            $dataAlertInformRule['sms'] = false;
+                        }
+                    }
+
+                    if($tempSingleRule[0] === 'voice') {
+                        if($tempSingleRule[1] === 'Y') {
+                            $dataAlertInformRule['voice'] = true;
+                        } else {
+                            $dataAlertInformRule['voice'] = false;
+                        }
+                    }
+                }
+            }
+            $data = array_merge($dataAlertRule, $dataAlertInformRule);
+        }
+
+        // var_dump($data);
+        // die;
+        
+        $alertForm = $this->createForm(new AlertSetType(), $data);
+        $alertForm->handleRequest($request);
+
+        if ($alertForm->isSubmitted() && $alertForm->isValid()) {
+            $alertData = $alertForm->getData();
+
+            // $username = $openid;
+            $alertRule = '';
+            $channel1 = $alertData['channel1'];
+            if($channel1) {
+                $alertRule = $alertRule . '1:Y';
+            } else {
+                $alertRule = $alertRule . '1:N';
+            }
+            $alertRule = $alertRule . '||';
+
+            $channel2 = $alertData['channel2'];
+            if($channel2) {
+                $alertRule = $alertRule . '2:Y';
+            } else {
+                $alertRule = $alertRule . '2:N';
+            }
+            $alertRule = $alertRule . '||';
+
+            $channel3 = $alertData['channel3'];
+            if($channel3) {
+                $alertRule = $alertRule . '3:Y';
+            } else {
+                $alertRule = $alertRule . '3:N';
+            }
+
+            $informRule = '';
+            $wechat = $alertData['wechat'];
+            if($wechat) {
+                $informRule = $informRule . 'wechat:Y';
+            } else {
+                $informRule = $informRule . 'wechat:N';
+            }
+            $informRule = $informRule . '||';
+
+            $sms = $alertData['sms'];
+            if($sms) {
+                $informRule = $informRule . 'sms:Y';
+            } else {
+                $informRule = $informRule . 'sms:N';
+            }
+            $informRule = $informRule . '||';
+
+            $voice = $alertData['voice'];
+            if($voice) {
+                $informRule = $informRule . 'voice:Y';
+            } else {
+                $informRule = $informRule . 'voice:N';
+            }
+
+            // echo $alertRule . '</br>';
+            // echo $informRule;
+            $alertItem->setAlertRule($alertRule);
+            $alertItem->setInformRule($informRule);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($alertItem);
+            $em->flush();
+
+            return $this->redirectToRoute('device_bind_success');
+        } 
+
         if($device) {
-            return $this->render('AcmeWebBundle:Wechat:devshow.html.twig', array('device' => $device));
+            return $this->render('AcmeWebBundle:Wechat:devshow.html.twig', array('device' => $device, 'form' => $alertForm->createView()));
         } else {
             return $this->render('AcmeWebBundle:Wechat:devnull.html.twig');
         }
