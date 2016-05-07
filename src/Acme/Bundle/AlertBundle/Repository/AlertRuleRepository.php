@@ -12,22 +12,39 @@ use Doctrine\ORM\EntityRepository;
  */
 class AlertRuleRepository extends EntityRepository
 {
-    public function findOneBySnJoinedToUser($deviceSn, $userName)
+  public function findOneBySnJoinedToUser($deviceSn, $userName)
+  {
+      $query = $this->getEntityManager()
+                    ->createQuery(
+                          'SELECT a FROM AcmeAlertBundle:AlertRule a
+                           JOIN a.user u
+                           JOIN a.device d
+                           WHERE d.sn = :sn AND u.username = :username
+                          '
+                      )
+                    ->setParameter('sn', $deviceSn)
+                    ->setParameter('username', $userName);
+      try {
+          return $query->getSingleResult();
+      } catch (\Doctrine\ORM\NoResultException $e) {
+          return null;
+      }
+  }
+
+  public function findOneBySnJoinedToDevice($deviceSn)
     {
         $query = $this->getEntityManager()
                       ->createQuery(
                             'SELECT a FROM AcmeAlertBundle:AlertRule a
-                             JOIN a.user u
                              JOIN a.device d
-                             WHERE d.sn = :sn AND u.username = :username
+                             WHERE d.sn = :sn
                             '
                         )
-                      ->setParameter('sn', $deviceSn)
-                      ->setParameter('username', $userName);
+                      ->setParameter('sn', $deviceSn);
         try {
             return $query->getSingleResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
             return null;
         }
-    }
+    }    
 }
