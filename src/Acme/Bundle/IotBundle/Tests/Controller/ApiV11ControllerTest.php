@@ -98,9 +98,19 @@ class ApiV11ControllerTest extends WebTestCase
         printf("\nTest ApiV11 Observer:\n");
         $client = static::createClient();
         $crawler = $client->request('GET', 
-                                    '/api/test/decorator/?' . $string
+                                    '/iot/api/test/decorator/?' . $string
                                     );
-        $client->getResponse()->getContent();
+        printf("\nTest Get URL success: %s\n", $client->getRequest()->getUri());
+        $this->assertEquals(
+                            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+                            $client->getResponse()->getStatusCode()
+                            );
+
+        $result = $this->removeSpace($client->getResponse()->getContent());
+        $correct_result = preg_match('/^result:[A-Za-z0-9]{10,}/i', $result);        
+
+        printf("\nTest Correct response format:\n" . $result . "\n");
+        $this->assertEquals(true, $correct_result);
     }
 
 

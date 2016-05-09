@@ -7,6 +7,7 @@ use Acme\Bundle\IotBundle\Service\Decorator\IComponent;
 use Acme\Bundle\IotBundle\Service\Observer\JimuObserver\ConcreteContext;
 use Acme\Bundle\IotBundle\Service\Observer\JimuObserver\ConcreteSubject;
 use Acme\Bundle\IotBundle\Service\Observer\JimuObserver\DbObserver;
+use Acme\Bundle\IotBundle\Service\Observer\JimuObserver\AlertObserver;
 
 class ParseRequestQueryDecorator extends Decorator
 {
@@ -17,7 +18,7 @@ class ParseRequestQueryDecorator extends Decorator
         $this->component = $component;
         $this->container = $this->component->container;        
         $context = new ConcreteContext($this->container);
-        $this->subject = new ConcreteSubject($context);
+        $this->subject = new ConcreteSubject($context);        
     }
 
     public function process()
@@ -29,6 +30,7 @@ class ParseRequestQueryDecorator extends Decorator
             $query_str_array = explode('&', $query_str);
 
             $dbObserver = new DbObserver($this->subject);
+            $alertObserver = new AlertObserver($this->subject);
             $this->subject->getContext()->setDecryptQueryString($query_str);
             $this->subject->notify();
         }

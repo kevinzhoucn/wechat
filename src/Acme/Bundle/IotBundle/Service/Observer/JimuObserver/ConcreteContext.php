@@ -72,6 +72,11 @@ class ConcreteContext
         return $this->entityManager;
     }
 
+    public function getLogger()
+    {
+        return $this->container->get("my_service.logger");
+    }
+
     public function getOrCreateNewDevice($sn)
     {
         if(!$sn) return null;
@@ -84,12 +89,20 @@ class ConcreteContext
         return $device;
     }
 
+    public function getAlertRuleBySn($sn)
+    {
+        if(!$sn) return null;
+
+        $alertRule = $this->entityManager->getRepository('AcmeAlertBundle:AlertRule')->SearchSnAlertRuleDescById($sn);
+        return $alertRule;
+    }
+
     public function saveItemToDB($item)
     {
         if($item) {
-            $this->entityManager->persist($datapoint);
+            $this->entityManager->persist($item);
 
-            $em->flush();
+            $this->entityManager->flush();
             return true;
         } else {
             return false;
@@ -107,5 +120,10 @@ class ConcreteContext
         } else {
             return false;
         }
+    }
+
+    public function getSMSService()
+    {
+        return $this->container->get('acme.alert.sms.meilian');
     }
 }

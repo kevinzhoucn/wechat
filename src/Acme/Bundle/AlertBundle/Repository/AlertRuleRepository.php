@@ -47,4 +47,22 @@ class AlertRuleRepository extends EntityRepository
             return null;
         }
     }    
+
+    public function SearchSnAlertRuleDescById($deviceSn)
+    {
+        $query = $this->getEntityManager()
+                      ->createQuery(
+                            'SELECT a FROM AcmeAlertBundle:AlertRule a
+                             JOIN a.device d
+                             WHERE d.sn = :sn ORDER BY a.id DESC
+                            '
+                        )
+                      ->setParameter('sn', $deviceSn);
+
+        try {
+            return $query->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
 }
