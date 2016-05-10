@@ -2,6 +2,10 @@ acme_web:
     resource: "@AcmeWebBundle/Resources/config/routing/web.yml"
     prefix:   /web
 
+qomo_backend:
+    resource: "@AcmeWebBundle/Resources/config/routing/backend/main.yml"
+    prefix: /administration
+
 acme_iot:
     resource: "@AcmeIotBundle/Resources/config/routing/main.yml"
     prefix:   /iot

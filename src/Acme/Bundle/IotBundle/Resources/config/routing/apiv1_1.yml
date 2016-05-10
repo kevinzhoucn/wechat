@@ -1,4 +1,9 @@
+# device_receive:
+#     path:     /send
+#     defaults: { _controller: "AcmeIotBundle:ApiV11:send" }
+#     methods:  GET
+
 device_receive:
-    path:     /send
-    defaults: { _controller: "AcmeIotBundle:ApiV11:send" }
-    methods:  GET
+    path:      /send
+    defaults:  {_controller: "AcmeIotBundle:ApiBase:jimuFacade" }
+    methods:   GET
