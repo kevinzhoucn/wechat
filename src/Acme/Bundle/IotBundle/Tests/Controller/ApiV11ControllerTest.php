@@ -62,7 +62,9 @@ class ApiV11ControllerTest extends WebTestCase
 
         $result_code = explode(':', $result)[1];
         $decryptResult = $security->decryptAlert($result_code);
+        $correct_response_result = preg_match('/^result:[0-1]{1},[0-9]{10,},[A-Za-z0-9]{8,}/i', 'result:' . $decryptResult);
         printf("Test Response code:\n" . $decryptResult . "\n");
+        $this->assertEquals(true, $correct_response_result);
     }
 
     /**
@@ -80,14 +82,16 @@ class ApiV11ControllerTest extends WebTestCase
                                     );
 
         $result = $this->removeSpace($client->getResponse()->getContent());
-        $correct_result = preg_match('/^result:[A-Za-z0-9]{10,}/i', $result);        
+        $correct_result = preg_match('/^result:[A-Za-z0-9]{10,}/i', $result);
 
         printf("\nTest Incorrect response format:\n" . $result . "\n");
         $this->assertEquals(true, $correct_result);
 
         $result_code = explode(':', $result)[1];
         $decryptResult = $security->decryptAlert($result_code);
+        $correct_response_result = preg_match('/^result:[0-1]{1},[0-9]{10,},,/i', 'result:' . $decryptResult);
         printf("Test Response code:\n" . $decryptResult . "\n");
+        $this->assertEquals(true, $correct_response_result);
     }
 
     /**
