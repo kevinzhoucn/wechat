@@ -85,13 +85,13 @@ class AlertObserver extends ConcreteObserver
                     if($tempSingleRule[0] === 'sms') {
                         if($tempSingleRule[1] === 'Y') {
                             $logger->info('Got alert: send sms');
-                            // $result = $sms->sendSMSText($mobiles, $content);
+                            $result = $sms->sendSMSText($mobiles, $content);
                         }
                     }
                     if($tempSingleRule[0] === 'voice') {
                         if($tempSingleRule[1] === 'Y') {
                             $logger->info('Got alert: send voice');
-                            // $result = $sms->sendSMSVoice($mobiles, $content);
+                            $result = $sms->sendSMSVoice($mobiles, $content);
                         }
                     }
                 }

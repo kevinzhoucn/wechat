@@ -21,8 +21,9 @@ class DashboardController extends Controller
      */
     public function mainAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository('AcmeUserBundle:User')->findAll();
+        // $em = $this->getDoctrine()->getManager();
+        // $users = $em->getRepository('AcmeUserBundle:User')->findAll();
+        $users = $this->get('qomo.repository.user')->findAll();
 
         return $this->render('AcmeWebBundle:Backend/Dashboard:main.html.twig', 
                             array(

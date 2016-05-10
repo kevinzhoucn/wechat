@@ -13,11 +13,10 @@
         </service>
     </services>
     -->
-<!--     <services>
-        <service id="acme_user.example" class="Acme\Bundle\UserBundle\Example">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+    <services>
+        <service id="qomo.repository.user" class="Doctrine\ORM\EntityRepository">
+            <factory class="Doctrine\ORM\EntityManager" method="getRepository" />
+            <argument>AcmeUserBundle\Entity\User</argument>
         </service>
-    </services> -->
+    </services>
 </container>
