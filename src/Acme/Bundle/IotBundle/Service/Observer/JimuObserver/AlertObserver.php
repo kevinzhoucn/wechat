@@ -81,7 +81,7 @@ class AlertObserver extends ConcreteObserver
 
                 foreach ($tempRules as $chunk) {
                     $tempSingleRule = explode(':', $chunk);
-                    $this->getLogger()->info(sprintf('Check inform rule: single rule, method: %s, value: %s', $tempSingleRule[0], $tempSingleRule[1]));
+                    $logger->info(sprintf('Check inform rule: single rule, method: %s, value: %s', $tempSingleRule[0], $tempSingleRule[1]));
                     if($tempSingleRule[0] === 'sms') {
                         if($tempSingleRule[1] === 'Y') {
                             $logger->info('Got alert: send sms');
