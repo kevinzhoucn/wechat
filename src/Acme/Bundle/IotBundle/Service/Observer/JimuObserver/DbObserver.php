@@ -7,6 +7,9 @@ use Acme\Bundle\IotBundle\Entity\DataPoint;
 class DbObserver extends ConcreteObserver
 {
     private $deviceArray;
+    private $randomStr;
+    private $correctFlag;
+
     public function doUpdate()
     {
         $deviceArray = $this->subject->getContext()->buildQueryArray();
@@ -17,6 +20,9 @@ class DbObserver extends ConcreteObserver
             $sn = $this->getValue('sn');
             $device = $this->subject->getContext()->getOrCreateNewDevice($sn);
 
+            $random = $this->getValue('random');
+            $this->randomStr = $random;
+
             if(!$device->getSn()) {
                 $device->setSn($sn);
 
@@ -24,10 +30,8 @@ class DbObserver extends ConcreteObserver
                 $device->setModel($model);
 
                 $vender = $this->getValue('vender');
-                $device->setVender($vender);
-
-                $random = $this->getValue('random');
-                $device->setVender($random);               
+                $device->setVender($vender);                
+                // $device->setRandom($random);               
             }
 
 
@@ -40,6 +44,7 @@ class DbObserver extends ConcreteObserver
                 // echo 'I will save to DB';
 
                 $this->subject->getContext()->saveItemArrayToDB(array($device, $datapoint));
+                $this->correctFlag = true;
             }
         }
     }
@@ -48,5 +53,21 @@ class DbObserver extends ConcreteObserver
     {
         $deviceArray = $this->deviceArray;
         return isset($deviceArray[$strName]) ? $deviceArray[$strName] : 'empty';
+    }
+
+    public function getResultStr()
+    {
+        $retResult = null;
+        if($this->randomStr) {
+            if($this->correctFlag) {
+                $retResult = sprintf("0,%s,%s,", time(), $this->randomStr);
+            } else {
+                $retResult = sprintf("1,%s,%s,", time(), $this->randomStr);
+            }
+        } else {
+            $retResult = sprintf("1,%s,,", time());
+        }
+
+        return $retResult;
     }
 }
