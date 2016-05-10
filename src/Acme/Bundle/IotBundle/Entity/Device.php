@@ -328,7 +328,7 @@ class Device
 
         if($this->user) {
             // echo count($this->user->getPhones()->toArray());
-            $mobiles = implode(',', $this->user->getPhones()->toArray());
+            $mobiles = implode(',', $this->user->getPhones());
         }
 
         return $mobiles;
