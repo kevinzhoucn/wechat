@@ -60,9 +60,9 @@ class DbObserver extends ConcreteObserver
         $retResult = null;
         if($this->randomStr) {
             if($this->correctFlag) {
-                $retResult = sprintf("0,%s,%s,", time(), $this->randomStr);
+                $retResult = sprintf("0,%s,%s", time(), $this->randomStr);
             } else {
-                $retResult = sprintf("1,%s,%s,", time(), $this->randomStr);
+                $retResult = sprintf("1,%s,%s", time(), $this->randomStr);
             }
         } else {
             $retResult = sprintf("1,%s,,", time());
