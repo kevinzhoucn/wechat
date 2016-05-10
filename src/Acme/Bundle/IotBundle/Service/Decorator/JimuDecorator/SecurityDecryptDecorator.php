@@ -7,13 +7,6 @@ use Acme\Bundle\IotBundle\Service\Decorator\IComponent;
 
 class SecurityDecryptDecorator extends Decorator
 {
-    // Remember assign container to class
-    public function __construct(IComponent $component)
-    {
-        $this->component = $component;
-        $this->container = $this->component->container;
-    }
-
     public function process()
     {
         $security = $this->container->get('acme.iot.security');

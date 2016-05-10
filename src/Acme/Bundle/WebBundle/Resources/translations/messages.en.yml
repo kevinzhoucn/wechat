@@ -1,0 +1,8 @@
+qomo:
+    meta:
+        backend_title: Administration
+    user:
+        id: ID
+        username: USERNAME
+        no_results: NO RESULT
+    show_all: SHOW ALL

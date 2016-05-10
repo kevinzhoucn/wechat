@@ -1,0 +1,3 @@
+qomo_backend_dashboard:
+    path: /dashboard
+    defaults: { _controller: AcmeWebBundle:Backend/Dashboard:main }

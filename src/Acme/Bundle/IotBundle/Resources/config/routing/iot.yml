@@ -8,7 +8,7 @@ acme_iot_security:
     defaults:
         _controller: AcmeIotBundle:ApiBase:checkSecurity
 
-acme_iot_test_decorator:
-    path: /api/test/decorator/
-    defaults:
-        _controller: AcmeIotBundle:ApiBase:testDecorator
+# acme_iot_test_decorator:
+#     path: /api/test/decorator/
+#     defaults:
+#         _controller: AcmeIotBundle:ApiBase:testDecorator

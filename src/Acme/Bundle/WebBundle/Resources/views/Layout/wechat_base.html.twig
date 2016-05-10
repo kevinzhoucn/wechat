@@ -16,6 +16,19 @@
     {% block body_javascript %}
       <script src="/js/jweixin-1.0.0.js"></script>
       <script src="/js/zepto.min.js"></script>
+      <script type="text/javascript">
+      wx.config({
+          debug: false,
+          appId: '{{ wechat.appid }}',
+          timestamp: {{ wechat.timestamp }},
+          nonceStr: '{{ wechat.nonceStr }}',
+          signature: '{{ wechat.signature }}',
+          jsApiList: [
+            'configWXDeviceWiFi',
+            'closeWindow'
+          ]
+      });
+      </script>
     {% endblock %}
   </body>
 </html>

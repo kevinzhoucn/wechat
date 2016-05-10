@@ -29,4 +29,10 @@ class ApiBaseController extends Controller
         $jimu = $this->container->get('acme.iot.facade.jimu');
         return new Response($jimu->handleDeviceRequest());
     }
+
+    public function jimuFacadeAction()
+    {
+        $jimuFacade = $this->container->get('acme.iot.facade.jimu');
+        return new Response($jimuFacade->handleDeviceRequest());
+    }
 }

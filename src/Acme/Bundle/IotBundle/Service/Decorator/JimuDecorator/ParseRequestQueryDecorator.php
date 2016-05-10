@@ -15,8 +15,7 @@ class ParseRequestQueryDecorator extends Decorator
     // Remember assign container to class
     public function __construct(IComponent $component)
     {
-        $this->component = $component;
-        $this->container = $this->component->container;        
+        parent::__construct($component);        
         $context = new ConcreteContext($this->container);
         $this->subject = new ConcreteSubject($context);        
     }
