@@ -25,6 +25,8 @@ class ParseRequestQueryDecorator extends Decorator
         $query_str_array = $result = null;
         $query_str = $this->component->process();
 
+        $dbObserver = null;
+
         if(strpos($query_str, "&") && strpos($query_str, "=")) {
             $query_str_array = explode('&', $query_str);
 
@@ -32,11 +34,11 @@ class ParseRequestQueryDecorator extends Decorator
             $alertObserver = new AlertObserver($this->subject);
             $this->subject->getContext()->setDecryptQueryString($query_str);
             $this->subject->notify();
+
+            $result = $dbObserver->getResultStr();
         }
 
-        if($query_str_array) {
-            $result = sprintf("0,%s,,", time());
-        } else {
+        if(!$result) {
             $result = sprintf("1,%s,,", time());
         }
 

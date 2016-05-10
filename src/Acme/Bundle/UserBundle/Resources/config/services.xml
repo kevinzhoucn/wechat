@@ -13,4 +13,11 @@
         </service>
     </services>
     -->
+<!--     <services>
+        <service id="acme_user.example" class="Acme\Bundle\UserBundle\Example">
+            <argument type="service" id="service_id" />
+            <argument>plain_value</argument>
+            <argument>%parameter_name%</argument>
+        </service>
+    </services> -->
 </container>

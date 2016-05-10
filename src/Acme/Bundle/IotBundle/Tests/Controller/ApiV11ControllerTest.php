@@ -82,7 +82,7 @@ class ApiV11ControllerTest extends WebTestCase
         $result = $this->removeSpace($client->getResponse()->getContent());
         $correct_result = preg_match('/^result:[A-Za-z0-9]{10,}/i', $result);        
 
-        printf("\nTest Correct response format:\n" . $result . "\n");
+        printf("\nTest Incorrect response format:\n" . $result . "\n");
         $this->assertEquals(true, $correct_result);
 
         $result_code = explode(':', $result)[1];
