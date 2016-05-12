@@ -54,10 +54,11 @@ class AlertRuleRepository extends EntityRepository
                       ->createQuery(
                             'SELECT a FROM AcmeAlertBundle:AlertRule a
                              JOIN a.device d
-                             WHERE d.sn = :sn ORDER BY a.id DESC limit 1
+                             WHERE d.sn = :sn ORDER BY a.id DESC
                             '
                         )
-                      ->setParameter('sn', $deviceSn);
+                      ->setParameter('sn', $deviceSn)
+                      ->setMaxResults(1);
 
         try {
             return $query->getSingleResult();

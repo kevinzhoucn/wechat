@@ -13,6 +13,7 @@ class ConcreteContext
     private $entityManager;
     private $queryString;
     private $decryptQueryString;
+    private $logger;
 
     public function __construct(ContainerInterface $container)
     {
@@ -24,6 +25,7 @@ class ConcreteContext
     {
         $this->entityManager = $this->container->get('doctrine')->getManager();
         // $this->queryString = $this->container->get('request')->getQueryString();
+        $this->logger = $this->container->get("my_service.logger");
     }
 
     public function getQueryString()
@@ -74,7 +76,7 @@ class ConcreteContext
 
     public function getLogger()
     {
-        return $this->container->get("my_service.logger");
+        return $this->logger ? $this->logger : $this->container->get("my_service.logger");
     }
 
     public function getOrCreateNewDevice($sn)
@@ -94,6 +96,10 @@ class ConcreteContext
         if(!$sn) return null;
 
         $alertRule = $this->entityManager->getRepository('AcmeAlertBundle:AlertRule')->SearchSnAlertRuleDescById($sn);
+
+        if($alertRule) {
+            $this->getLogger()->info(sprintf("Get alert rule: %s", $alertRule->getId()));
+        }
         return $alertRule;
     }
 
