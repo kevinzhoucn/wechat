@@ -97,7 +97,9 @@ class ConcreteContext
 
         $alertRule = $this->entityManager->getRepository('AcmeAlertBundle:AlertRule')->SearchSnAlertRuleDescById($sn);
 
-        $this->getLogger()->info(sprintf("Get alert rule: %s", $alertRule->getId()));
+        if($alertRule) {
+            $this->getLogger()->info(sprintf("Get alert rule: %s", $alertRule->getId()));
+        }
         return $alertRule;
     }
 
