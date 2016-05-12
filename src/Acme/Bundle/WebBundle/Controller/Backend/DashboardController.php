@@ -23,6 +23,8 @@ class DashboardController extends Controller
     {
         // $em = $this->getDoctrine()->getManager();
         // $users = $em->getRepository('AcmeUserBundle:User')->findAll();
+        // $em = $this->get('doctrine.orm.entity_manager');
+        // $users = $em->getRepository('Acme\Bundle\UserBundle\Entity\User')->findAll();
         $users = $this->get('qomo.repository.user')->findAll();
 
         return $this->render('AcmeWebBundle:Backend/Dashboard:main.html.twig', 

@@ -15,8 +15,13 @@
     -->
 <!--     <services>
         <service id="qomo.repository.user" class="Doctrine\ORM\EntityRepository">
-            <factory class="doctrine.orm.entity_manager" method="getRepository" />
             <argument>AcmeUserBundle\Entity\User</argument>
         </service>
     </services> -->
+    <services>
+        <service id="qomo.repository.user" class="Doctrine\ORM\EntityRepository">
+            <factory service="doctrine.orm.entity_manager" method="getRepository" />
+            <argument>Acme\Bundle\UserBundle\Entity\User</argument>
+        </service>
+    </services>
 </container>
