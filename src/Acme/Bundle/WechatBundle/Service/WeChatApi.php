@@ -239,4 +239,69 @@ class WeChatApi
 
         return $str;
     }
+
+    public function sendWechatTemplate($useropenid, $device_id)
+    {
+        $webchat_access_token = $this->getAccessToken();
+        // $template_short_id = '';
+        // $template_url = "https://api.weixin.qq.com/cgi-bin/template/api_add_template?access_token=" . $wechat_access_token;
+
+        // $data = array(
+        //                 'template_id_short'     => $template_short_id
+        //               );
+
+        // $retData = $this->curlWechat($template_url, $data);
+        // $retDataJson = $this->accessTokenJsonDecode($retData);
+
+        // $errcode = isset($ret->{"errcode"}) ? $ret->{"errcode"} : 1;
+        // $template_id = $errmsg = null;
+
+        // if( $errcode === 0 ){
+        //     $errmsg = $ret->{"errmsg"};
+        //     $template_id = $ret->{"template_id"};
+        // } else {
+        //     return $errmsg;
+        // }
+
+        $template_id = 'pwQT-bVjtfTnS07W0OLt790e-LvegyNpwn_tBCZXoVk';
+
+        $send_template_url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" . $webchat_access_token;
+        $user_openid = $useropenid; // user_openid get from device->user->username;
+        $objDateTime = new DateTime('NOW');        
+        $template_data =  array(
+                                    'touser'      => $user_openid,
+                                    'template_id' => $template_id,
+                                    'url'         => 'http://weixin.qq.com/download',
+                                    'data'        => array( 'first' => 
+                                                                array('value' => '您好，您的监控设备发送报警！'),
+                                                            'device' =>
+                                                                array('value' => $device_id),
+                                                            'time'  =>
+                                                                array('value' => $objDateTime->format('Y-m-d H:i:s')),
+                                                            'remark' =>
+                                                                array('value' => '备注：请尽快查看设备状态！')
+                                                           )
+                                );
+        $retData = $this->curlWechat($template_url, $data);
+
+        $this->logger->info(sprintf("Get wechat server message: %s", $retData));
+
+        // $retDataJson = $this->accessTokenJsonDecode($retData);
+    }
+
+    private function curlWechat($url, $post_fields = array())
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);//用PHP取回的URL地址（值将被作为字符串）
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//使用curl_setopt获取页面内容或提交数据，有时候希望返回的内容作为变量存储，而不是直接输出，这时候希望返回的内容作为变量
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);//30秒超时限制
+        curl_setopt($ch, CURLOPT_HEADER, 1);//将文件头输出直接可见。
+        curl_setopt($ch, CURLOPT_POST, 1);//设置这个选项为一个零非值，这个post是普通的application/x-www-from-urlencoded类型，多数被HTTP表调用。
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);//post操作的所有数据的字符串。
+        $data = curl_exec($ch);//抓取URL并把他传递给浏览器
+        curl_close($ch);//释放资源
+        // $res = explode("\r\n\r\n", $data);//explode把他打散成为数组
+        // return $res[2]; //然后在这里返回数组。
+        return $data;
+    }
 }
