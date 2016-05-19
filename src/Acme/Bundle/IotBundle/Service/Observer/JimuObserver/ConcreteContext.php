@@ -132,4 +132,9 @@ class ConcreteContext
     {
         return $this->container->get('acme.alert.sms.meilian');
     }
+
+    public function getWechatService()
+    {
+        return $this->container->get('acme.wechat.api');
+    }
 }

@@ -68,9 +68,11 @@ class AlertObserver extends ConcreteObserver
     private function sendAlert($device, $informRule, $content)
     {
         $sms = $this->subject->getContext()->getSMSService();
+        $wechat = $this->subject->getContext()->getWechatService();
         $logger = $this->subject->getContext()->getLogger();
 
         $mobiles = $device->getAlertMobiles();
+        $user = $device->getUser();
         $logger->info("mobile: " . $mobiles);
 
         $result = 'empty';
@@ -92,6 +94,13 @@ class AlertObserver extends ConcreteObserver
                         if($tempSingleRule[1] === 'Y') {
                             $logger->info('Got alert: send voice');
                             $result .= $sms->sendSMSVoice($mobiles, $content);
+                        }
+                    }
+                    if($tempSingleRule[0] === 'wechat') {
+                        if($tempSingleRule[1] === 'Y') {
+                            $logger->info('Got alert: send wechat message');
+                            // $result .= $sms->sendSMSVoice($mobiles, $content);
+                            $wechat->sendWechatTemplate($user->getUsername(), $device->getSn());
                         }
                     }
                 }
