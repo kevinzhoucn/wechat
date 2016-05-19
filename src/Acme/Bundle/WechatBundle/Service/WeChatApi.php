@@ -274,13 +274,13 @@ class WeChatApi
         $content1 = '您好，您的监控设备发送报警！';
         $content2 = '备注：请尽快查看设备状态！';
         $content_data = array(  'first' => 
-                                    array('value' => urlencode($content1)),
+                                    array('value' => $content1),
                                 'device' =>
                                     array('value' => $device_id),
                                 'time'  =>
                                     array('value' => $objDateTime->format('Y-m-d H:i:s')),
                                 'remark' =>
-                                    array('value' => urlencode($content2))
+                                    array('value' => $content2)
                                );
         $content_data_string = json_encode($content_data);
 
