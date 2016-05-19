@@ -288,7 +288,7 @@ class WeChatApi
                                     'touser'      => $user_openid,
                                     'template_id' => $template_id,
                                     'url'         => 'http://weixin.qq.com/download',
-                                    'data'        => $content_data
+                                    'data'        => $content_data_string
                                 );
         $this->logger->info(sprintf("Json encode: %s", json_encode($template_data)));
         $retData = $this->curlWechat($send_template_url, $template_data);
