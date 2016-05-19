@@ -271,19 +271,24 @@ class WeChatApi
 
         $this->logger->info(sprintf("Send template url: %s", $send_template_url));
         $this->logger->info(sprintf("User openid: %s, time now: %s", $user_openid, $objDateTime->format('Y-m-d H:i:s')));
+        $content1 = '您好，您的监控设备发送报警！';
+        $content2 = '备注：请尽快查看设备状态！';
+        $content_data = array(  'first' => 
+                                    array('value' => urlencode($content1)),
+                                'device' =>
+                                    array('value' => $device_id),
+                                'time'  =>
+                                    array('value' => $objDateTime->format('Y-m-d H:i:s')),
+                                'remark' =>
+                                    array('value' => urlencode($content2))
+                               );
+        $content_data_string = json_encode($content_data);
+
         $template_data =  array(
                                     'touser'      => $user_openid,
                                     'template_id' => $template_id,
                                     'url'         => 'http://weixin.qq.com/download',
-                                    'data'        => array( 'first' => 
-                                                                array('value' => '您好，您的监控设备发送报警！'),
-                                                            'device' =>
-                                                                array('value' => $device_id),
-                                                            'time'  =>
-                                                                array('value' => $objDateTime->format('Y-m-d H:i:s')),
-                                                            'remark' =>
-                                                                array('value' => '备注：请尽快查看设备状态！')
-                                                           )
+                                    'data'        => $content_data_string
                                 );
         $this->logger->info(sprintf("Json encode: %s", json_encode($template_data)));
         $retData = $this->curlWechat($template_url, json_encode($template_data));
