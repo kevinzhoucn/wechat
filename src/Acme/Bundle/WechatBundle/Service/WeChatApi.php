@@ -267,7 +267,7 @@ class WeChatApi
 
         $send_template_url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" . $webchat_access_token;
         $user_openid = $useropenid; // user_openid get from device->user->username;
-        $objDateTime = new DateTime('NOW');        
+        $objDateTime = new \DateTime('NOW');        
         $template_data =  array(
                                     'touser'      => $user_openid,
                                     'template_id' => $template_id,
