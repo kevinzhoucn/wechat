@@ -268,6 +268,9 @@ class WeChatApi
         $send_template_url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" . $webchat_access_token;
         $user_openid = $useropenid; // user_openid get from device->user->username;
         $objDateTime = new \DateTime('NOW');        
+
+        $this->logger->info(sprintf("Send template url: %s", $send_template_url));
+        $this->logger->info(sprintf("User openid: %s, time now: %s", $user_openid, $objDateTime->format('Y-m-d H:i:s')));
         $template_data =  array(
                                     'touser'      => $user_openid,
                                     'template_id' => $template_id,
@@ -282,6 +285,7 @@ class WeChatApi
                                                                 array('value' => '备注：请尽快查看设备状态！')
                                                            )
                                 );
+        $this->logger->info(sprintf("Json encode: %s", json_encode($template_data)));
         $retData = $this->curlWechat($template_url, $data);
 
         $this->logger->info(sprintf("Get wechat server message: %s", $retData));
