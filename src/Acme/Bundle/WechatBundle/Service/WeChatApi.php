@@ -273,6 +273,10 @@ class WeChatApi
         $this->logger->info(sprintf("User openid: %s, time now: %s", $user_openid, $objDateTime->format('Y-m-d H:i:s')));
         $content1 = "您好，您的监控设备发送报警！";
         $content2 = "备注：请尽快查看设备状态！";
+
+        $content1 = urlencode($content1);
+        $content2 = urlencode($content2);
+
         $content_data = array(  'first' => 
                                     array('value' => $content1),
                                 'device' =>
@@ -282,15 +286,17 @@ class WeChatApi
                                 'remark' =>
                                     array('value' => $content2)
                                );
-        $content_data_string = urlencode($content_data);
+        // $content_data_string = urlencode($content_data);
 
-        $conten_data_json = "{\"first\":{\"value\":$content1},\"device\":{\"value\":$device_id},\"time\":{\"value\":$objDateTime->format('Y-m-d H:i:s')},\"remark\":{\"value\":$content2}}";
+        // $conten_data_json = "{\"first\":{\"value\":$content1},\"device\":{\"value\":$device_id},\"time\":{\"value\":$objDateTime->format('Y-m-d H:i:s')},\"remark\":{\"value\":$content2}}";
+
+        $content_data_json = $content_data;
 
         $template_data =  array(
                                     'touser'      => $user_openid,
                                     'template_id' => $template_id,
                                     'url'         => 'http://weixin.qq.com/download',
-                                    'data'        => $conten_data_json
+                                    'data'        => $content_data_json
                                 );
         $this->logger->info(sprintf("Json encode: %s", $content_data_string));
         $retData = $this->curlWechat($send_template_url, $template_data);
