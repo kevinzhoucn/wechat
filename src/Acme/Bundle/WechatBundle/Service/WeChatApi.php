@@ -288,9 +288,11 @@ class WeChatApi
                                );
         // $content_data_string = urlencode($content_data);
 
-        // $conten_data_json = "{\"first\":{\"value\":$content1},\"device\":{\"value\":$device_id},\"time\":{\"value\":$objDateTime->format('Y-m-d H:i:s')},\"remark\":{\"value\":$content2}}";
+        $conten_data_json = "{\"first\":{\"value\":$content1},\"device\":{\"value\":$device_id},\"time\":{\"value\":$objDateTime->format('Y-m-d H:i:s')},\"remark\":{\"value\":$content2}}";        
 
-        $content_data_json = $content_data;
+        // $content_data_json = $content_data;
+
+        $content_data_json = json_encode($content_data_json);
 
         $template_data =  array(
                                     'touser'      => $user_openid,
