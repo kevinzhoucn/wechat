@@ -274,10 +274,10 @@ class WeChatApi
         $content1 = "您好，您的监控设备发送报警！";
         $content2 = "备注：请尽快查看设备状态！";
 
-        $content1 = urlencode($content1);
-        $content2 = urlencode($content2);
+        //$content1 = urlencode($content1);
+        //$content2 = urlencode($content2);
 
-        $content_data = array(  'first' => 
+        $content_data_json = array(  'first' => 
                                     array('value' => $content1),
                                 'device' =>
                                     array('value' => $device_id),
@@ -289,20 +289,25 @@ class WeChatApi
         // $content_data_string = urlencode($content_data);
 
         // $conten_data_json = "{\"first\":{\"value\":$content1},\"device\":{\"value\":$device_id},\"time\":{\"value\":$objDateTime->format('Y-m-d H:i:s')},\"remark\":{\"value\":$content2}}";
-        $conten_data_json = "{\"first\":{\"value\":\"first data!\"},\"device\":{\"value\":\"device\"},\"time\":{\"value\":\"time\"},\"remark\":{\"value\":\"remark\"}}";
+        //$content_data_json = '{"first":{"value":"first data!"},"device":{"value":"device"},"time":{"value":"time"},"remark":{"value":"remark"}}';
 
         // $content_data_json = $content_data;
 
-        // $content_data_json = json_encode($content_data_json);
+        //$content_data_json = json_encode($content_data);
+	//$content_data_json = array( 'time' => array( 'value' => $objDateTime->format('Y-m-d H:i:s')));
 
+        //$content_data_json = json_encode($content_data);
+	//$content_data_json = {"time":{"value":"2016-05-19 13:19:00"};
         $template_data =  array(
-                                    'touser'      => $user_openid,
-                                    'template_id' => $template_id,
-                                    'url'         => 'http://weixin.qq.com/download',
-                                    'data'        => $content_data_json
+                                    "touser"      => $user_openid,
+                                    "template_id" => $template_id,
+                                    "url"         => "http://weixin.qq.com/download",
+                                    "data"        => $content_data_json
                                 );
+	$template_data_json = json_encode($template_data);
         $this->logger->info(sprintf("Json encode: %s", $content_data_string));
-        $retData = $this->curlWechat($send_template_url, $template_data);
+	$this->logger->info(sprintf("Template data: %s", json_encode($template_data)));
+        $retData = $this->curlWechat02($send_template_url, $template_data_json);
 
         $this->logger->info(sprintf("Get wechat server message: %s", $retData));
 
@@ -310,6 +315,22 @@ class WeChatApi
     }
 
     private function curlWechat($url, $post_fields = array())
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);//用PHP取回的URL地址（值将被作为字符串）
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//使用curl_setopt获取页面内容或提交数据，有时候希望返回的内容作为变量存储，而不是直接输出，这时候希望返回的内容作为变量
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);//30秒超时限制
+        curl_setopt($ch, CURLOPT_HEADER, 1);//将文件头输出直接可见。
+        curl_setopt($ch, CURLOPT_POST, 1);//设置这个选项为一个零非值，这个post是普通的application/x-www-from-urlencoded类型，多数被HTTP表调用。
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);//post操作的所有数据的字符串。
+        $data = curl_exec($ch);//抓取URL并把他传递给浏览器
+        curl_close($ch);//释放资源
+        // $res = explode("\r\n\r\n", $data);//explode把他打散成为数组
+        // return $res[2]; //然后在这里返回数组。
+        return $data;
+    }
+
+    private function curlWechat02($url, $post_fields = "")
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);//用PHP取回的URL地址（值将被作为字符串）
