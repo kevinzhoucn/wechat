@@ -18,7 +18,7 @@ acme_wechat:
     resource: "@AcmeWechatBundle/Resources/config/routing/main.yml"
     prefix:   /wechat
 
-acme_user:
+acme_iot_user:
     resource: "@AcmeUserBundle/Resources/config/routing/main.yml"
     prefix:   /user
 
@@ -29,3 +29,8 @@ acme_alert:
 acme_fedex:
     resource: "@AcmeFedexBundle/Resources/config/routing/main.yml"
     prefix:   /fedex
+
+acme_frontend:
+    resource: "@AcmeWebBundle/Resources/config/routing/frontend/main.yml"
+    prefix:   /front
+

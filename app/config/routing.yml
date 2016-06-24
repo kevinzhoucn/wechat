@@ -1,7 +1,11 @@
+# homepage:
+#     path: /
+#     defaults:
+#         _controller: AcmeWebBundle:Front:index
+
 homepage:
     path: /
-    defaults:
-        _controller: AcmeWebBundle:Front:index
+    defaults: { _controller: "AcmeUserBundle:Security:login" }
 
 # Web routing file include all routing from bundle
 # Single Entry for the site

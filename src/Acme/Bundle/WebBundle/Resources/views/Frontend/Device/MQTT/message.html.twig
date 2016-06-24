@@ -1,0 +1,146 @@
+{% extends 'AcmeWebBundle:Layout:device_base.html.twig' %}
+{% block title %}设备客户端{% endblock %}
+
+{% block body_content %}
+    <div class="container-fluid">
+        <div class="row">
+            {% include 'AcmeWebBundle:Common:mqtt_sidebar.html.twig' %}            
+            {% include 'AcmeWebBundle:Frontend/Device/MQTT/partials:_targetdev.html.twig' %}
+            {% include 'AcmeWebBundle:Frontend/Device/MQTT/partials:_connect_info.html.twig' %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block body_javascript %}
+    <script src='/js/jquery-1.7.2.min.js'></script>
+    <script src="/js/mqttws31.js"></script>
+    <script>//<![CDATA[
+        $(document).ready(function(){
+          // $("#connect_clientId").val("example-"+(Math.floor(Math.random() * 100000)));
+          var clientId = "clientdemo-" + (Math.floor(Math.random() * 100000));
+          if( !window.WebSocket) {
+            // $("#connect").html("\
+            //     <h1>Get a new Web Browser!</h1>\
+            //     <p>\
+            //     Your browser does not support WebSockets. This example will not work properly.<br>\
+            //     Please use a Web Browser with WebSockets support (WebKit or Google Chrome).\
+            //     </p>\
+            // ");
+          } else {            
+            var client, destination;
+
+            // $('#connect_form').submit(function() {
+            //   // var host = $("#connect_host").val();    
+            //   // var port = $("#connect_port").val();
+            //   // var clientId = $("#connect_clientId").val();
+            //   // var user = $("#connect_user").val();
+            //   // var password = $("#connect_password").val();
+            //     var host = "168.63.134.186";
+            //     var port = "61623";
+            //     var user = "admin";
+            //     var password = "password";
+
+            //   // destination = $("#destination").val();
+            //     destination = $("#destination").val();
+            
+            //   client = new Messaging.Client(host, Number(port), clientId);
+            //   //client = new Messaging.Client(host, Number(port), clientId);
+
+            //   client.onConnect = onConnect;
+          
+            //   client.onMessageArrived = onMessageArrived;
+            //   client.onConnectionLost = onConnectionLost;            
+
+            //   client.connect({
+            //     userName:user, 
+            //     password:password, 
+            //     onSuccess:onConnect, 
+            //     onFailure:onFailure
+            //   }); 
+            //   return false;
+            // });  
+            
+            var host = "168.63.134.186";
+            var port = "61623";
+            var user = "admin";
+            var password = "password";
+
+            // destination = $("#destination").val();
+            // destination = $("#destination02").val();
+            destination = "MQTT/RAWDATA/liuhaibao/device1";
+
+            client = new Messaging.Client(host, Number(port), clientId);
+            //client = new Messaging.Client(host, Number(port), clientId);
+
+            // the client is notified when it is connected to the server.
+            var onConnect = function(frame) {
+              debug("connected to MQTT");
+              debug("connect to topic: " + destination);
+              // $('#connect').fadeOut({ duration: 'fast' });
+              // $('#connected').fadeIn();
+              client.subscribe(destination);
+            };  
+
+            // this allows to display debug logs directly on the web page
+            var debug = function(str) {
+              $("#info").append(document.createTextNode(str + "\n"));
+            };  
+
+            // $('#disconnect').click(function() {
+            //   client.disconnect();
+            //   $('#connected').fadeOut({ duration: 'fast' });
+            //   $('#connect').fadeIn();
+            //   $("#messages").html("")
+            //   return false;
+            // });
+
+            $('#send_form').submit(function() {
+              var text = $('#send_form_input').val();
+              if (text) {
+                message = new Messaging.Message(text);
+                message.destinationName = destination;
+                client.send(message);
+                $('#send_form_input').val("");
+              }
+              return false;
+            });
+
+            function onFailure(failure) {
+              debug("failure");
+              debug(failure.errorMessage);
+            }
+
+            function onMessageArrived(message) {
+              // var p = document.createElement("p");
+              // var t = document.createTextNode(message.payloadString);
+              // p.appendChild(t);
+
+              // $("#messages").append(p);
+              var total_messages = $("#messages").text();
+              if( total_messages.length > 1000 ) $("#messages").text("");
+              $("#messages").append(document.createTextNode(message.payloadString));
+              // alert(message.payloadString);
+            }
+
+            function onConnectionLost(responseObject) {
+              if (responseObject.errorCode !== 0) {
+                debug(client.clientId + ": " + responseObject.errorCode + "\n");
+              }
+            }
+
+            client.onConnect = onConnect;
+
+            client.onMessageArrived = onMessageArrived;
+            client.onConnectionLost = onConnectionLost;            
+
+            client.connect({
+              userName:user, 
+              password:password, 
+              onSuccess:onConnect, 
+              onFailure:onFailure
+            }); 
+          }
+        });    
+    //]]></script>
+{% endblock %}

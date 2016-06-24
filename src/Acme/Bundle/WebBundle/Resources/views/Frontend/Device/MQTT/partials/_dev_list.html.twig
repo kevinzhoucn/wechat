@@ -1,0 +1,39 @@
+<div class="col-sm-4 col-sm-offset-3 col-md-4 col-md-offset-2 main">
+    <h1 class="page-header">设备列表</h1>
+
+    <div class="row placeholders">
+        <p style="">
+            <div class="well">                    
+                {{ form_start(form) }}
+                    <fieldset>
+                        <div class="form-group">
+                            {{ form_widget(form.name, {'attr': {'placeholder' : '字母开头和数字的组合', 'style' : 'float:left;width:60%'}}) }}
+                            <button type="submit" class="btn btn-primary" style="width:30%;float:right">创建新设备</button>
+                        </div>                   
+                    </fieldset>
+                {{ form_end(form) }}
+            </div>
+        </p>
+    </div>
+
+    <p>全部</p>
+    <div class="row placeholders">
+        <ul class="list-group">
+            {% if devices.count > 0 %}
+                {% for item in devices %}
+                    <li class="list-group-item">
+                        {{ item.name }}
+                        <a href="{{ path('acme_frontend_device_mqtt_item_message', {'id' : item.id}) }}">
+                            <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li class="list-group-item">
+                    您没有设备
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+
+</div>

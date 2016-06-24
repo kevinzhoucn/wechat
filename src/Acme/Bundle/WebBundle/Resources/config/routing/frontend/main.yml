@@ -1,0 +1,3 @@
+acme_frontend_device:
+    resource: "@AcmeWebBundle/Resources/config/routing/frontend/device/main.yml"
+    prefix:   /device

@@ -67,7 +67,8 @@
 
                                 {% if app.user %}
                                     <li>
-                                        <a href="{{ path('security_logout') }}">
+                                        {# <a href="{{ path('security_logout') }}"> #}
+                                        <a href="{{ path('acme_iot_user_logout') }}">
                                             <i class="fa fa-sign-out"></i> {{ 'menu.logout'|trans }}
                                         </a>
                                     </li>

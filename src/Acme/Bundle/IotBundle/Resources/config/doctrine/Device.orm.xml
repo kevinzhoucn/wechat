@@ -13,7 +13,7 @@
         </id>
 
         <field name="name" type="string" column="name" length="25" nullable="true"/>
-        <field name="sn" type="string" column="sn" length="32" unique="true"/>
+        <field name="sn" type="string" column="sn" length="32" unique="false" nullable="true"/>
         <field name="model" type="string" column="model" length="32" nullable="true" />
         <field name="vender" type="string" column="vender" length="32" nullable="true" />
 

@@ -1,0 +1,2 @@
+acme_iot_user_main:
+    resource: "@AcmeUserBundle/Resources/config/routing/user.yml"

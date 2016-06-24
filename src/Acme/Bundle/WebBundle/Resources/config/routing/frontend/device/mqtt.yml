@@ -1,0 +1,17 @@
+acme_frontend_device_mqtt_message:
+    path: /message
+    defaults: { _controller: AcmeWebBundle:Frontend/Device:mqttMessage }
+
+acme_frontend_device_mqtt_item_message:
+    path: /message/{id}
+    defaults: { _controller: AcmeWebBundle:Frontend/Device:mqttItemMessage }
+
+    
+acme_frontend_device_mqtt_transfer:
+    path: /transfer
+    defaults: { _controller: AcmeWebBundle:Frontend/Device:mqttTransfer }
+
+acme_frontend_device_mqtt_devlist:
+    path: /devlist
+    defaults: { _controller: AcmeWebBundle:Frontend/Device:devList }    
+    methods: [GET, POST]

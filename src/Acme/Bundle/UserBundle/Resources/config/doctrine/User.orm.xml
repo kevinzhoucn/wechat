@@ -16,15 +16,15 @@
     <field name="phones" column="phones" type="array" nullable="true" />
 
     <one-to-many field="devices" target-entity="Acme\Bundle\IotBundle\Entity\Device" mapped-by="user" orphan-removal="true">
-            <cascade>
-                <cascade-all />
-            </cascade>
+        <cascade>
+            <cascade-all />
+        </cascade>
     </one-to-many>
 
     <one-to-many field="alert_rules" target-entity="Acme\Bundle\AlertBundle\Entity\AlertRule" mapped-by="user" orphan-removal="true">
-            <cascade>
-                <cascade-all />
-            </cascade>
+        <cascade>
+            <cascade-all />
+        </cascade>
     </one-to-many>
 
     <field name="createdAt" column="created_at" type="datetime" nullable="true">

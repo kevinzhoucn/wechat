@@ -1,24 +1,32 @@
-user_index:
-    path:     /
-    defaults: { _controller: "AcmeUserBundle:User:index" }
-    methods:  GET
+# user_index:
+#     path:     /
+#     defaults: { _controller: "AcmeUserBundle:User:index" }
+#     methods:  GET
 
-user_show:
-    path:     /{id}/show
-    defaults: { _controller: "AcmeUserBundle:User:show" }
-    methods:  GET
+# user_show:
+#     path:     /{id}/show
+#     defaults: { _controller: "AcmeUserBundle:User:show" }
+#     methods:  GET
 
-user_new:
+acme_iot_user_new:
     path:     /new
-    defaults: { _controller: "AcmeUserBundle:User:new" }
+    defaults: { _controller: "AcmeUserBundle:UserIot:new" }
     methods:  [GET, POST]
 
-user_edit:
-    path:     /{id}/edit
-    defaults: { _controller: "AcmeUserBundle:User:edit" }
+# user_edit:
+#     path:     /{id}/edit
+#     defaults: { _controller: "AcmeUserBundle:User:edit" }
+#     methods:  [GET, POST]
+
+# user_delete:
+#     path:     /{id}/delete
+#     defaults: { _controller: "AcmeUserBundle:User:delete" }
+#     methods:  DELETE
+
+acme_iot_user_login_form:
+    path:     /login
+    defaults: { _controller: "AcmeUserBundle:Security:login" }
     methods:  [GET, POST]
 
-user_delete:
-    path:     /{id}/delete
-    defaults: { _controller: "AcmeUserBundle:User:delete" }
-    methods:  DELETE
+acme_iot_user_logout:
+    path:     /logout

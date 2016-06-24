@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <title>{% block title %}title{% endblock %}</title>
+
+    {% block head_stylesheet %}
+      <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" >
+      <link href="/css/dashboard.css" rel="stylesheet" >
+    {% endblock %}
+
+    {% block head_javascript %}{% endblock %}
+  </head>
+  <body>
+    {% block body_header %}
+      {% include 'AcmeWebBundle:Common:topbar.html.twig' %}
+    {% endblock %}
+    {% block body_content %}
+    {% endblock %}
+    {% block body_javascript %}
+    {% endblock %}
+  </body>
+</html>

@@ -29,4 +29,42 @@ class DeviceRepository extends EntityRepository
             return null;
         }
     }
+
+    public function findOneByNameJoinedToUser($deviceName, $userName)
+    {
+        $query = $this->getEntityManager()
+                      ->createQuery(
+                            'SELECT d FROM AcmeIotBundle:Device d
+                             JOIN d.user u
+                             WHERE d.name = :name AND u.username = :username
+                            '
+                        )
+                      ->setParameter('name', $deviceName)
+                      ->setParameter('username', $userName)
+                      ->setMaxResults(1);
+        try {
+            return $query->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
+
+    public function findOneByDeviceIdJoinedToUser($deviceId, $userName)
+    {
+        $query = $this->getEntityManager()
+                      ->createQuery(
+                            'SELECT d FROM AcmeIotBundle:Device d
+                             JOIN d.user u
+                             WHERE d.id = :id AND u.username = :username
+                            '
+                        )
+                      ->setParameter('id', $deviceId)
+                      ->setParameter('username', $userName)
+                      ->setMaxResults(1);
+        try {
+            return $query->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
 }

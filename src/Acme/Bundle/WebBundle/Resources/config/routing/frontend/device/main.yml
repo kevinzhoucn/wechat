@@ -1,0 +1,3 @@
+acme_frontend_device_mqtt:
+    resource: "@AcmeWebBundle/Resources/config/routing/frontend/device/mqtt.yml"
+    prefix: /mqtt

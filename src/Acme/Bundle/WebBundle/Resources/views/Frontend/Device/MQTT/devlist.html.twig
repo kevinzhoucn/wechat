@@ -1,0 +1,16 @@
+{% extends 'AcmeWebBundle:Layout:device_base.html.twig' %}
+{% block title %}设备列表{% endblock %}
+
+{% block body_content %}
+    <div class="container-fluid">
+        <div class="row">
+            {% include 'AcmeWebBundle:Common:mqtt_sidebar.html.twig' %}
+            {% include 'AcmeWebBundle:Frontend/Device/MQTT/partials:_dev_list.html.twig' %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block body_javascript %}
+    <script src='/js/jquery-1.7.2.min.js'></script>
+{% endblock %}
