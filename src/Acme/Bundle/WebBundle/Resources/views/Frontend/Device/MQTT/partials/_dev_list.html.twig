@@ -23,9 +23,16 @@
                 {% for item in devices %}
                     <li class="list-group-item">
                         {{ item.name }}
-                        <a href="{{ path('acme_frontend_device_mqtt_item_message', {'id' : item.id}) }}">
-                            <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
-                        </a>
+                        <div class="pull-right">
+                            <a href="{{ path('acme_frontend_device_mqtt_item_message', {'id' : item.id}) }}" title="查看详情">
+                                <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+                            </a>
+
+                            <a id="dev_delete" title="点击删除" data-id="{{ item.id }}" data-name="{{ item.name }}">
+                                <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                                {{ buttons.delete(path('acme_frontend_device_mqtt_dev_delete', {'id': item.id}), null, false, false) }}
+                            </a>                                                        
+                        </div>
                     </li>
                 {% endfor %}
             {% else %}

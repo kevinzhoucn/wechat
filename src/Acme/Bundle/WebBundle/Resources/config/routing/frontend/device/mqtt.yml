@@ -15,3 +15,8 @@ acme_frontend_device_mqtt_devlist:
     path: /devlist
     defaults: { _controller: AcmeWebBundle:Frontend/Device:devList }    
     methods: [GET, POST]
+
+acme_frontend_device_mqtt_dev_delete:
+    path: /dev/{id}/delete
+    defaults: { _controller: AcmeWebBundle:Frontend/Device:devDelete }
+    methods: [DELETE]

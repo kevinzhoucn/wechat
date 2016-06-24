@@ -1,12 +1,11 @@
 {% extends 'AcmeWebBundle:Layout:device_base.html.twig' %}
-{% block title %}设备客户端{% endblock %}
+{% block title %}发送消息{% endblock %}
 
 {% block body_content %}
     <div class="container-fluid">
         <div class="row">
             {% include 'AcmeWebBundle:Common:mqtt_sidebar.html.twig' %}            
-            {% include 'AcmeWebBundle:Frontend/Device/MQTT/partials:_targetdev.html.twig' %}            
-            {% include 'AcmeWebBundle:Frontend/Device/MQTT/partials:_connect_info.html.twig' %}
+            {% include 'AcmeWebBundle:Frontend/Device/MQTT/partials:_sourcedev.html.twig' %}
         </div>
     </div>
 {% endblock %}

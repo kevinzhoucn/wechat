@@ -23,10 +23,6 @@ class DeviceController extends Controller
                        ->getRepository('AcmeIotBundle:Device')
                        ->findOneByDeviceIdJoinedToUser($id, $username);
 
-        // if(!$device){
-        //     return $this->redirectToRoute('acme_frontend_device_mqtt_devlist');
-        // }       
-
         return $this->render('AcmeWebBundle:Frontend\Device\MQTT:message_item.html.twig',
                              array('devname' => $device->getName(), 'username' => $user->getUsername())
                             );
@@ -47,6 +43,7 @@ class DeviceController extends Controller
 
         $device = new Device();
         $form = $this->createForm(new DeviceType(), $device);
+        // $deleteForm = $this->createDeleteForm($device);
 
         // $logger = $this->container->get("my_service.logger");
         // $logger->info(sprintf("==========Log from dev list: user name: %s", $user->getUsername()));
@@ -84,5 +81,24 @@ class DeviceController extends Controller
                              'devices' => $devices,
                              'form' => $form->createView()
         ));
+    }
+
+    public function devDeleteAction(Request $request, Device $device)
+    {
+        if($device) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($device);
+            $em->flush();
+        }
+        return $this->redirectToRoute('acme_frontend_device_mqtt_devlist');
+    }
+
+    private function createDeleteForm(Device $device)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('acme_frontend_device_mqtt_dev_delete', array('id' => $device->getId())))
+            ->setMethod('DELETE')
+            ->getForm()
+        ;
     }
 }

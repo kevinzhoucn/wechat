@@ -6,7 +6,7 @@
         <div class="row">
             {% include 'AcmeWebBundle:Common:mqtt_sidebar.html.twig' %}            
             {% include 'AcmeWebBundle:Frontend/Device/MQTT/partials:_targetdev.html.twig' %}
-            {% include 'AcmeWebBundle:Frontend/Device/MQTT/partials:_connect_info.html.twig' %}
+            {% include 'AcmeWebBundle:Frontend/Device/MQTT/partials:_sourcedev.html.twig' %}
         </div>
     </div>
 {% endblock %}
@@ -36,6 +36,13 @@
             var password = "password";
 
             destination = "MQTT/RAWDATA/{{ username }}/{{ devname }}";
+            var t_config_dest = "MQTT/SUBCONFIG/{{ username }}/{{ devname }}";
+
+            var t_dev_random = parseInt(Math.random() * (9999 - 1000 + 1) + 1000);
+            console.log(t_dev_random);
+            var t_dev_random_name = "devdemo" + t_dev_random;
+            var t_destination = "MQTT/RAWDATA/{{ username }}/devdemo" + t_dev_random;
+            console.log(t_destination);
 
             client = new Messaging.Client(host, Number(port), clientId);
             //client = new Messaging.Client(host, Number(port), clientId);
@@ -47,7 +54,14 @@
               // $('#connect').fadeOut({ duration: 'fast' });
               // $('#connected').fadeIn();
               client.subscribe(destination);
-            };  
+
+              var msg = "oridev=" + t_dev_random_name;
+              message = new Messaging.Message(msg);
+              message.destinationName = t_config_dest;
+              client.send(message);
+
+              debug("create new topic: " + t_destination);
+            };
 
             // this allows to display debug logs directly on the web page
             var debug = function(str) {
@@ -66,8 +80,10 @@
               var text = $('#send_form_input').val();
               if (text) {
                 message = new Messaging.Message(text);
-                message.destinationName = destination;
+                message.destinationName = t_destination;
                 client.send(message);
+
+                debug("send message: '" + text + "' to topic: " + t_destination);
                 $('#send_form_input').val("");
               }
               return false;
