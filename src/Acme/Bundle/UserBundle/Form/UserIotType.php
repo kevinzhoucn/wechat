@@ -17,6 +17,7 @@ class UserIotType extends AbstractType
     {
         $builder
             ->add('username')
+            ->add('primaryPhone')
             ->add('password', 'repeated', array(
             'type' => 'password'))
         ;

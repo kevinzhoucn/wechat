@@ -94,7 +94,7 @@ body {
   text-align: center;
 }
 
-.placeholders li{
+.placeholders li, #info, #messages {
   text-align: left;
 }
 

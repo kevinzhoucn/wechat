@@ -48,6 +48,11 @@ class User implements UserInterface, \Serializable
     private $phones;
 
     /**
+     * @var array
+     */
+    private $primaryPhone;
+
+    /**
      * @var \DateTime
      */
     private $createdAt;
@@ -156,6 +161,24 @@ class User implements UserInterface, \Serializable
     {
         return $this->email;
     }
+
+    /**
+     * Get primaryPhone
+     *
+     * @return string 
+     */
+    public function getPrimaryPhone()
+    {
+        return $this->primaryPhone;
+    }
+
+    public function setPrimaryPhone($primaryPhone)
+    {
+        $this->primaryPhone = $primaryPhone;
+
+        return $this;
+    }
+
 
     /**
      * Set isActive

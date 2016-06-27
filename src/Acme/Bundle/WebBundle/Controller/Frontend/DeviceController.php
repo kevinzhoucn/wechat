@@ -41,6 +41,8 @@ class DeviceController extends Controller
         $user = $this->getUser();
         $devices = $user->getDevices();
 
+        $test_str = "|12345";
+
         $device = new Device();
         $form = $this->createForm(new DeviceType(), $device);
         // $deleteForm = $this->createDeleteForm($device);

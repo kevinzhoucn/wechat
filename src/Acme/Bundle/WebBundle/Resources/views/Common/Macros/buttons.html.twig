@@ -1,11 +1,21 @@
+{% macro show16hex(enable=true) %}
+    {% if enable %}
+        <p class="text-left">
+            <input type="checkbox">
+            16进制
+        </p>
+    {% endif %}
+{% endmacro %}
+
+
 {% macro delete(url, message, disabled=false, modal=true) %}
-{% if disabled %}
-<span class="btn btn-danger disabled">
-    <i class="glyphicon glyphicon-trash"></i><span>{{ message is empty ? 'sylius.delete'|trans : message }}</span>
-</span>
-{% else %}
-<form action="{{ url }}" method="post" class="delete-action-form" novalidate>
-    <input type="hidden" name="_method" value="DELETE">
-</form>
-{% endif %}
+    {% if disabled %}
+        <span class="btn btn-danger disabled">
+            <i class="glyphicon glyphicon-trash"></i><span>{{ message is empty ? 'sylius.delete'|trans : message }}</span>
+        </span>
+    {% else %}
+        <form action="{{ url }}" method="post" class="delete-action-form" novalidate>
+            <input type="hidden" name="_method" value="DELETE">
+        </form>
+    {% endif %}
 {% endmacro %}

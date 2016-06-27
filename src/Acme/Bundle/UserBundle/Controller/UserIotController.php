@@ -44,6 +44,11 @@ class UserIotController extends Controller
             $em->persist($user);
             $em->flush();
 
+            $username = $user->getUsername();
+            $password = $user->getPassword();
+
+            $this->updatePropertyFile($username, $password);
+
             // return $this->redirectToRoute('user_show', array('id' => $user->getId()));
             return $this->redirectToRoute('acme_frontend_device_mqtt_devlist');
         }
@@ -125,5 +130,30 @@ class UserIotController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    private function updatePropertyFile($username, $password)
+    {
+        // Update users group properties file
+        $file_user = $this->getParameter("mqtt_user_properties_file");
+        $file_group = fopen($this->getParameter("mqtt_groups_properties_file"), 'r');
+        $file_content = "";
+        while(false !== ($s = fgets($file_group))) {
+            if(strpos($s, "users") === 0) {
+                $s = rtrim($s, "\r\n");
+                $file_content = $file_content . $s . "|" . $username . "\r\n";
+            } else {
+                $file_content = $file_content . $s;
+            }
+        }
+        fclose($file_group);
+        
+        $file_group = fopen($this->getParameter("mqtt_groups_properties_file"), 'w');
+        fwrite($file_group, $file_content);
+        fclose($file_group);        
+
+        // Update users name and password to user.properities
+        $new_user = $username . "=" . $password;
+        file_put_contents($file_user, $new_user, FILE_APPEND|LOCK_EX);
     }
 }
