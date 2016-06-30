@@ -153,7 +153,7 @@ class UserIotController extends Controller
         fclose($file_group);        
 
         // Update users name and password to user.properities
-        $new_user = $username . "=" . $password;
+        $new_user = $username . "=" . $password . "\r\n";
         file_put_contents($file_user, $new_user, FILE_APPEND|LOCK_EX);
     }
 }

@@ -67,3 +67,9 @@ parameters:
     sms_voice_accout: "account2"
     sms_voice_password_md5: "password2_md5"
     sms_voice_api_key: "abcdefg12345qwerty"
+
+
+    mqtt_server_folder: '/path'
+    mqtt_user_properties_file: %mqtt_server_folder%/etc/users.properties
+    mqtt_groups_properties_file: %mqtt_server_folder%/etc/groups.properties
+
