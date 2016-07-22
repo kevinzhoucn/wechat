@@ -410,6 +410,74 @@ Messaging = (function (global) {
     	return buffer;
     }	
 
+    function decodeNextMessage(input) {
+        var first = input[0];
+        var type = first >> 4;
+        var messageInfo = first &= 0x0f;
+        var pos = 1;
+
+        var digit;
+        var remLength = 0;
+        var multiplier = 1;
+        var tOffset = 2;
+        do {
+            digit = input[pos++];
+            remLength += ((digit & 0x7F) * multiplier);
+            multiplier *= 128;
+
+            if(multiplier > 128) {
+                tOffset += 1;
+            }
+        } while ((digit & 0x80) != 0);
+
+        var wireMessage = new WireMessage(type);
+        switch(type) {
+            case MESSAGE_TYPE.CONNACK:
+                wireMessage.topicNameCompressionResponse = input[pos++];
+                wireMessage.returnCode = input[pos++];
+                break;
+            
+            case MESSAGE_TYPE.PUBLISH:
+                var qos = (messageInfo >> 1) & 0x03;
+                            
+                var len = readUint16(input, pos);
+                pos += 2;
+                var topicName = parseUTF8(input, pos, len);
+                pos += len;
+                // If QoS 1 or 2 there will be a messageIdentifier
+                if (qos > 0) {
+                    wireMessage.messageIdentifier = readUint16(input, pos);
+                    pos += 2;
+                }
+                
+                console.log( "pos value: " + pos);
+                var messagePayload = input.subarray(pos, remLength + tOffset);
+
+                if(input.length > remLength + tOffset) {
+                    console.log("message length exceed2!");
+                    var tRemainMessage = input.subarray(remLength + tOffset);
+                    messageMore = decodeNextMessage(tRemainMessage);
+                    messagePayload = $.merge(messagePayload, messageMore);
+                }
+
+                // var message = new Messaging.Message(messagePayload);
+                // console.log( "message length: " + remLength);
+                // console.log( "offset: " + tOffset );
+
+                // if ((messageInfo & 0x01) == 0x01) 
+                //     message.retained = true;
+                // if ((messageInfo & 0x08) == 0x08)
+                //     message.duplicate =  true;
+                // message.qos = qos;
+                // message.destinationName = topicName;
+                // wireMessage.payloadMessage = message;   
+                break;
+            default:
+                ;
+        }
+        return messagePayload;
+    }
+
     function decodeMessage(input) {
     	//var msg = new Object();  // message to be constructed
     	var first = input[0];
@@ -423,10 +491,15 @@ Messaging = (function (global) {
     	var digit;
     	var remLength = 0;
     	var multiplier = 1;
+        var tOffset = 2;
     	do {
     		digit = input[pos++];
     		remLength += ((digit & 0x7F) * multiplier);
     		multiplier *= 128;
+
+            if(multiplier > 128) {
+                tOffset += 1;
+            }
     	} while ((digit & 0x80) != 0);
 
     	var wireMessage = new WireMessage(type);
@@ -436,7 +509,7 @@ Messaging = (function (global) {
     	        wireMessage.returnCode = input[pos++];
     		    break;
     	    
-    	    case MESSAGE_TYPE.PUBLISH:     	    	
+    	    case MESSAGE_TYPE.PUBLISH:
     	    	var qos = (messageInfo >> 1) & 0x03;
     	    	   		    
     	    	var len = readUint16(input, pos);
@@ -449,7 +522,22 @@ Messaging = (function (global) {
     		        pos += 2;
                 }
                 
-                var message = new Messaging.Message(input.subarray(pos));
+                console.log( "pos value: " + pos);
+                var messagePayload = input.subarray(pos, remLength + tOffset);
+                var messageMore = "";
+
+                if(input.length > remLength + tOffset) {
+                    console.log("message length exceed!");
+                    var tRemainMessage = input.subarray(remLength + tOffset);
+                    messageMore = decodeNextMessage(tRemainMessage);
+                    messagePayload = $.merge(messagePayload, messageMore);
+                }
+
+                var message = new Messaging.Message(messagePayload);
+                console.log( "message length: " + remLength);
+                console.log( "offset: " + tOffset );
+                console.log( message );
+
                 if ((messageInfo & 0x01) == 0x01) 
     	    		message.retained = true;
     	    	if ((messageInfo & 0x08) == 0x08)
@@ -1081,7 +1169,11 @@ Messaging = (function (global) {
         this.receivePinger.reset();
         var byteArray = new Uint8Array(event.data);
         try {
+            // console.log("byte: ");
+            console.log(byteArray.length);
+            console.log(byteArray);
             var wireMessage = decodeMessage(byteArray);
+            // console.log(wireMessage);
         } catch (error) {
         	this._disconnected(ERROR.INTERNAL_ERROR.code , format(ERROR.INTERNAL_ERROR, [error.message]));
         	return;
@@ -1288,6 +1380,7 @@ Messaging = (function (global) {
     ClientImpl.prototype._receiveMessage = function (wireMessage) {
         if (this.onMessageArrived) {
             this.onMessageArrived(wireMessage.payloadMessage);
+            // this.onMessageArrived(wireMessage);
         }
     };
 
@@ -1803,8 +1896,10 @@ Messaging = (function (global) {
     	this._getPayloadString = function () {
     		if (typeof payload === "string")
        			return payload;
-       		else
+       		else {
+                // console.log("I am not string!");
        			return parseUTF8(payload, 0, payload.length); 
+            }
     	};
 
     	this._getPayloadBytes = function() {

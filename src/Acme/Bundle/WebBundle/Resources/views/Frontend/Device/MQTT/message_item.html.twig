@@ -16,6 +16,7 @@
 {% block body_javascript %}
   <script src='/js/jquery-1.7.2.min.js'></script>
   <script src="/js/mqttws31.js"></script>
+  <script src="/js/mqtt/jimuiot.js"></script>
   <script>//<![CDATA[
     $(document).ready(function(){
       // $("#connect_clientId").val("example-"+(Math.floor(Math.random() * 100000)));
@@ -31,18 +32,21 @@
       } else {            
         var client, destination;
         
-        var host = "168.63.134.186";
+        // var host = "168.63.134.186";
+        var host = "182.92.227.161";
         var port = "61623";
         var user = "admin";
         var password = "password";
 
         destination = "MQTT/RAWDATA/{{ username }}/{{ devname }}";
-        var t_config_dest = "MQTT/SUBCONFIG/{{ username }}/{{ devname }}";
+        // destination = "MQTT/RAWDATA/test1/device1";
+        var t_config_dest = "MQTT/SUBCONFIG/{{ username }}/{{ devname }}";        
 
         var t_dev_random = parseInt(Math.random() * (9999 - 1000 + 1) + 1000);
         console.log(t_dev_random);
         var t_dev_random_name = "devdemo" + t_dev_random;
         var t_destination = "MQTT/RAWDATA/{{ username }}/devdemo" + t_dev_random;
+        // t_destination = "MQTT/RAWDATA/test1/device1";
         console.log(t_destination);
 
         client = new Messaging.Client(host, Number(port), clientId);
@@ -77,17 +81,83 @@
         //   return false;
         // });
 
-        $('#send_form').submit(function() {
-          var text = $('#send_form_input').val();
-          if (text) {
-            message = new Messaging.Message(text);
-            message.destinationName = t_destination;
-            client.send(message);
+        // $('#send_form').submit(function() {
+        //   var text = $('#send_form_input').val();
+        //   if (text) {
+        //     var buffer = new ArrayBuffer(4);
+        //     var bytes = new Uint8Array(buffer);
+        //     bytes[0] = 16;
 
-            debug("send message: '" + text + "' to topic: " + t_destination);
-            $('#send_form_input').val("");
+        //     console.log(bytes);
+
+        //     message = new Messaging.Message(bytes);
+        //     message.destinationName = t_destination;
+        //     client.send(message);
+
+        //     debug("send message: '" + text + "' to topic: " + t_destination);
+        //     $('#send_form_input').val("");
+        //   }
+        //   return false;
+        // });
+
+        $('#send_button').click(function(event){
+          event.preventDefault();
+          var text = $('#send_form_input').val();
+          var message;
+
+          if (!text) return;
+
+          var hexChecked = $("#hexInputSend").attr("checked");
+
+          if (hexChecked) {
+            console.log("send bytes:");
+            if (text.length > 2) {
+              if (text.length %2 != 0) {
+                text = text.substring(0, text.length - 1);
+              }
+
+              var sendText = "";
+              // console.log("text length: " + text.length);
+              var bufferSize = text.length / 2;
+              var buffer = new ArrayBuffer(bufferSize);
+              var bytes = new Uint8Array(buffer);
+
+              var tempData;
+              var j = 0;
+              for (var i = 0; i < text.length; i++) {
+                tempData = text[i];
+                // console.log("current index: " + i + " current value: " + tempData);
+
+                if (i%2 == 0){
+                  // console.log("index value: " + i);                
+                  continue;
+                }
+
+                if ( i == 1) {
+                  tempData = text.substring(0, 2);
+                } else {
+                  tempData = text.substring(i-1, i+1);
+                }
+
+                console.log(tempData);
+                bytes[j++] = "0x" + tempData;
+              };
+
+              console.log(bytes);
+
+              message = new Messaging.Message(bytes);
+            } 
+          } else {
+              console.log("send string:");
+              message = new Messaging.Message(text);
+
+              console.log(text);
           }
-          return false;
+          // message.destinationName = t_destination;
+          message.destinationName = t_destination;
+          client.send(message);
+
+          debug("send message: '" + text + "' to topic: " + t_destination);
         });
 
         function onFailure(failure) {
@@ -96,15 +166,26 @@
         }
 
         function onMessageArrived(message) {
-          // var p = document.createElement("p");
-          // var t = document.createTextNode(message.payloadString);
-          // p.appendChild(t);
-
-          // $("#messages").append(p);
           var total_messages = $("#messages").text();
           if( total_messages.length > 1000 ) $("#messages").text("");
-          $("#messages").append(document.createTextNode(message.payloadString));
-          // alert(message.payloadString);
+
+          var hexChecked = $("#hexInput").attr("checked");
+          console.log(hexChecked);
+
+          if (hexChecked) {
+            // var bytes = message.payload
+            //message.payloadBytes
+            var bytes = message.payloadBytes;
+            console.log(bytes);
+
+            var bytesString = "";
+            for (var i = 0; i < bytes.length; i++) {
+              bytesString = bytesString + bytes[i].toString(16) + " ";
+            };
+            $("#messages").append(document.createTextNode(bytesString));
+          } else {
+            $("#messages").append(document.createTextNode(message.payloadString));
+          }          
         }
 
         function onConnectionLost(responseObject) {
@@ -116,7 +197,7 @@
         client.onConnect = onConnect;
 
         client.onMessageArrived = onMessageArrived;
-        client.onConnectionLost = onConnectionLost;            
+        client.onConnectionLost = onConnectionLost;
 
         client.connect({
           userName:user, 

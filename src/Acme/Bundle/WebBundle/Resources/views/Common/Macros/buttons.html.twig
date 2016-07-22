@@ -1,8 +1,12 @@
-{% macro show16hex(enable=true) %}
+{% macro show16hex(enable=true, input=false) %}
     {% if enable %}
         <p class="text-left">
-            <input type="checkbox">
+            <input id="hexInput{% if input %}Send{% endif %}" type="checkbox">
             16进制
+
+            {% if input %}
+                <span class="bg-info">请输入有效16进制数'1-F'</span>
+            {% endif %}
         </p>
     {% endif %}
 {% endmacro %}

@@ -2,27 +2,31 @@
   <h1 class="page-header">发送信息</h1>
 
   <div class="row placeholders">
-    <form id="send_form" class="form-horizontal">
-        <div class="form-group">
-            <label class="col-sm-2 control-label">消息</label>
-            <div class="col-sm-10">
-                <textarea id="send_form_input" class="form-control" rows="5" placeholder="输入要发送的消息..." style="min-height:200px;resize: none"></textarea>
+    <div class="col-sm-12">
+        {{ buttons.show16hex(true, true) }}
+    
+        <form id="send_form" class="form-horizontal">        
+            <div class="form-group">
+                <label class="col-sm-2 control-label">消息</label>
+                <div class="col-sm-10">
+                    <textarea id="send_form_input" class="form-control" rows="5" placeholder="输入要发送的消息..." style="min-height:200px;resize: none"></textarea>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label"></label>
-            <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary">发送</button>
-            </div>
-        </div>        
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <button id="send_button" type="submit" class="btn btn-primary">发送</button>
+                </div>
+            </div>        
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">记录</label>
-            <div class="col-sm-10">
-                <pre id="info" style="min-height:40px"></pre>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">记录</label>
+                <div class="col-sm-10">
+                    <pre id="info" style="min-height:40px"></pre>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
   </div>
 </div>

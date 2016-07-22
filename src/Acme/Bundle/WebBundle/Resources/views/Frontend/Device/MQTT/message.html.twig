@@ -120,6 +120,7 @@
               var total_messages = $("#messages").text();
               if( total_messages.length > 1000 ) $("#messages").text("");
               $("#messages").append(document.createTextNode(message.payloadString));
+              console.log(message.payloadString);
               // alert(message.payloadString);
             }
 
