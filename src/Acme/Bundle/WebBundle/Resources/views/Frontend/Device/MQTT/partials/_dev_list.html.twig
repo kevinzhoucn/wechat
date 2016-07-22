@@ -2,6 +2,11 @@
     <h1 class="page-header">设备列表</h1>
 
     <div class="row placeholders">
+        <ul class="list-group">
+            <li class="list-group-item">
+                通信密码: {% if deviceKey %}{{ deviceKey }}{% else %}空 - 联系管理员{% endif %}
+            </li>
+        </ul>
         <p style="">
             <div class="well">                    
                 {{ form_start(form) }}

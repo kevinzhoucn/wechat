@@ -39,7 +39,9 @@ class DeviceController extends Controller
     public function devListAction(Request $request)
     {
         $user = $this->getUser();
-        $devices = $user->getDevices();
+        $deviceKey = $user->getDeviceKey();
+        
+        $devices = $user->getDevices();        
 
         $test_str = "|12345";
 
@@ -79,6 +81,7 @@ class DeviceController extends Controller
         }
 
         return $this->render('AcmeWebBundle:Frontend\Device\MQTT:devlist.html.twig', array(
+                             'deviceKey' => $deviceKey,
                              'device' => $device,
                              'devices' => $devices,
                              'form' => $form->createView()

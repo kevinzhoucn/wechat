@@ -37,6 +37,8 @@ class User implements UserInterface, \Serializable
      */
     private $devices;
 
+    private $deviceKey;
+
     /**
      * @var array
      */
@@ -81,6 +83,7 @@ class User implements UserInterface, \Serializable
         // $this->phones = new ArrayCollection();
         $this->phones = array();
         // $this->createdAt = time();
+        $this->deviceKey = $this->getRandChar(16);
     }
 
     /**
@@ -115,7 +118,6 @@ class User implements UserInterface, \Serializable
     {
         return $this->username;
     }
-
     /**
      * Set password
      *
@@ -178,7 +180,6 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
-
 
     /**
      * Set isActive
@@ -448,5 +449,23 @@ class User implements UserInterface, \Serializable
     public function getAlertRules()
     {
         return $this->alert_rules;
+    }
+
+    public function getDeviceKey()
+    {
+        return $this->deviceKey;
+    }
+
+    private function getRandChar($length)
+    {
+        $str = null;
+        $strPol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+        $max = strlen($strPol) - 1;
+
+        for($i=0;$i<$length;$i++){
+            $str .= $strPol[rand(0,$max)]; //rand($min,$max)生成介于min和max两个数之间的一个随机整数
+        }
+
+        return $str;
     }
 }

@@ -45,7 +45,8 @@ class UserIotController extends Controller
             $em->flush();
 
             $username = $user->getUsername();
-            $password = $user->getPassword();
+            // $password = $user->getPassword();
+            $password = $user->getDeviceKey();
 
             $this->updatePropertyFile($username, $password);
 

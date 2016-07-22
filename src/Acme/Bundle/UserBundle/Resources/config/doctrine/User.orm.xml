@@ -14,6 +14,7 @@
 
     <field name="roles" column="roles" type="array" nullable="true" />
     <field name="phones" column="phones" type="array" nullable="true" />
+    <field name="deviceKey" type="string" column="device_key" length="20" nullable="true"/>
 
     <one-to-many field="devices" target-entity="Acme\Bundle\IotBundle\Entity\Device" mapped-by="user" orphan-removal="true">
         <cascade>
