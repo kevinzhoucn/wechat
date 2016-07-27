@@ -38,6 +38,8 @@
       var timestamp = Date.parse(new Date()); 
       var first_message = true;
 
+      console.log(timestamp);
+
       // alert(timestamp);
 
       // $("#connect_clientId").val("example-"+(Math.floor(Math.random() * 100000)));
@@ -61,7 +63,7 @@
         var password = "password";
 
         destination = "IOTCOM/RAWDATA/{{ username }}/{{ devname }}";
-        // destination = "IOTCOM/RAWDATA/test1/device1";
+        // destination = "IOTCOM/RAWDATA/test/device1";
         var t_config_dest = "IOTCOM/SUBCONFIG/{{ username }}/{{ devname }}";        
 
         var t_dev_random = parseInt(Math.random() * (9999 - 1000 + 1) + 1000);
@@ -199,7 +201,10 @@
         function onMessageArrived(message) {
           var current_timestamp = Date.parse(new Date());
 
-          if ( first_message && current_timestamp - timestamp < 1000) {
+          // console.log(current_timestamp);
+          // console.log(current_timestamp - timestamp);
+
+          if ( first_message && current_timestamp - timestamp <= 1000) {
             // alert(first_message);
             first_message = false;
             return;

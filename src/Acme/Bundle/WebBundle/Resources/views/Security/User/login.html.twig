@@ -6,7 +6,15 @@
     <div class="container-fluid">
         {% if error %}
             <div class="alert alert-danger">
-                {{ error.messageKey|trans(error.messageData, 'security') }}
+                {# {{ error.messageKey|trans(error.messageData, 'security') }} #}
+                用户名或密码错误！
+            </div>
+        {% endif %}
+
+        {% if regmessage %}
+            <div class="alert alert-info">
+                {# {{ error.messageKey|trans(error.messageData, 'security') }} #}
+                注册成功，请重新登录！
             </div>
         {% endif %}
 

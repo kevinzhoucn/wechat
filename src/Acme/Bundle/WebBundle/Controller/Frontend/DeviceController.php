@@ -28,7 +28,7 @@ class DeviceController extends Controller
                             );
     }
 
-    public function mqttTransferAction()    
+    public function mqttTransferAction()
     {
         $user = $this->getUser();
         $devices = $user->getDevices();

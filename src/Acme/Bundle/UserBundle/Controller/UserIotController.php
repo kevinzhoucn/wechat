@@ -39,24 +39,37 @@ class UserIotController extends Controller
         $form = $this->createForm(new UserIotType(), $user);
         $form->handleRequest($request);
 
+        $error = null;
+
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $data = $form->getData();
+            $username = $data->getUsername();
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $userExists = $em->getRepository('AcmeUserBundle:User')->findByUsername($username);
 
-            $username = $user->getUsername();
-            // $password = $user->getPassword();
-            $password = $user->getDeviceKey();
+            if ($userExists) {
+                $error = "该用户已被注册！";
+            } else {
+                $em->persist($user);
+                $em->flush();
 
-            $this->updatePropertyFile($username, $password);
+                $username = $user->getUsername();
+                // $password = $user->getPassword();
+                $password = $user->getDeviceKey();
 
-            // return $this->redirectToRoute('user_show', array('id' => $user->getId()));
-            return $this->redirectToRoute('acme_frontend_device_mqtt_devlist');
+                $this->updatePropertyFile($username, $password);
+
+                // return $this->redirectToRoute('acme_frontend_device_mqtt_devlist');
+                return $this->redirect('/user/login?regstatus=1');
+            }
         }
 
         return $this->render('AcmeWebBundle:Frontend\User:new.html.twig', array(
-            'user' => $user,
-            'form' => $form->createView(),
+                             'user' => $user,
+                             'form' => $form->createView(),
+                             'error' => $error
         ));
     }
 

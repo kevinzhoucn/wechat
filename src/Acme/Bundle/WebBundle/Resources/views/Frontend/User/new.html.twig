@@ -4,10 +4,17 @@
 
 {% block body_content %}
     <div class="container-fluid">
+        {% if error %}
+            <div id="alert_div" class="alert alert-danger">
+                {# {{ error.messageKey|trans(error.messageData, 'security') }} #}
+                {{ error }}
+            </div>
+        {% endif %}
         <div class="row">
             <div class="col-md-3 col-md-offset-2">
                 <div class="well">                    
                     {{ form_start(form) }}
+                        {# {{ form_errors(form) }} #}
                         <fieldset>
                             <legend><i class="fa fa-lock"></i> 用户注册 </legend>
 
@@ -28,12 +35,31 @@
                                 {{ form_widget(form.password.second, {'attr': {'placeholder' : '再次输入密码'}}) }}
                             </div>
                             
-                            <button type="submit" class="btn btn-primary">提交</button>
+                            <button id="reg_but" type="submit" class="btn btn-primary">提交</button>
                         </fieldset>
                     {{ form_end(form) }}
                 </div>
             </div>
         </div>
+
     </div>
     
+{% endblock %}
+
+{% block body_javascript %}
+  <script src='/js/jquery-1.7.2.min.js'></script>
+  <script>//<![CDATA[
+    $(document).ready(function(){
+        $('#reg_but').click(function(event){
+            event.preventDefault();
+            var firstpass = $("#user_iot_password_first").val();
+            var secondpass = $("#user_iot_password_second").val();
+            if( firstpass != secondpass ){
+                $("#alert_div").text("两次输入密码不一致");
+            } else {
+                $(this).parents("form").submit();
+            }
+        });
+    });
+    //]]></script>
 {% endblock %}

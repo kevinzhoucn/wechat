@@ -14,12 +14,19 @@ class SecurityController extends Controller
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
+        $regstatus = $request->query->get('regstatus');
+        $regmessage = null;
+        if($regstatus) {
+            $regmessage = "1";
+        }
+
         return $this->render(
                     'AcmeWebBundle:Security/User:login.html.twig',
                     array(
                         // last username entered by the user
                         'last_username' => $lastUsername,
                         'error'         => $error,
+                        'regmessage'    => $regmessage
                     )
                 );
     }
