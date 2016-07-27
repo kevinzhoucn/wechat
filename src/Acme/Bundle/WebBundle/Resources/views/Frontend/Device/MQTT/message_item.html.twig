@@ -18,7 +18,28 @@
   <script src="/js/mqttws31.js"></script>
   <script src="/js/mqtt/jimuiot.js"></script>
   <script>//<![CDATA[
+
     $(document).ready(function(){
+        $('#manualsetlink').click(function(event){
+          event.preventDefault();
+          $('#manualsetlink').hide();
+          $('#manualconfirm').show();
+        });
+
+        $('#manualsetcancel').click(function(event){
+          event.preventDefault();
+          $('#manualconfirm').hide();
+          $('#manualsetlink').show();
+        });
+    });
+
+
+    $(document).ready(function(){
+      var timestamp = Date.parse(new Date()); 
+      var first_message = true;
+
+      // alert(timestamp);
+
       // $("#connect_clientId").val("example-"+(Math.floor(Math.random() * 100000)));
       var clientId = "clientdemo-" + (Math.floor(Math.random() * 100000));
       if( !window.WebSocket) {
@@ -32,21 +53,22 @@
       } else {            
         var client, destination;
         
-        var host = "168.63.134.186";
+        // var host = "168.63.134.186";
         // var host = "182.92.227.161";
+        var host = "121.42.180.136";
         var port = "61623";
         var user = "admin";
         var password = "password";
 
-        destination = "MQTT/RAWDATA/{{ username }}/{{ devname }}";
-        // destination = "MQTT/RAWDATA/test1/device1";
-        var t_config_dest = "MQTT/SUBCONFIG/{{ username }}/{{ devname }}";        
+        destination = "IOTCOM/RAWDATA/{{ username }}/{{ devname }}";
+        // destination = "IOTCOM/RAWDATA/test1/device1";
+        var t_config_dest = "IOTCOM/SUBCONFIG/{{ username }}/{{ devname }}";        
 
         var t_dev_random = parseInt(Math.random() * (9999 - 1000 + 1) + 1000);
         console.log(t_dev_random);
         var t_dev_random_name = "devdemo" + t_dev_random;
-        var t_destination = "MQTT/RAWDATA/{{ username }}/devdemo" + t_dev_random;
-        // t_destination = "MQTT/RAWDATA/test1/device1";
+        var t_destination = "IOTCOM/RAWDATA/{{ username }}/devdemo" + t_dev_random;
+        // t_destination = "IOTCOM/RAWDATA/test1/device1";
         console.log(t_destination);
 
         client = new Messaging.Client(host, Number(port), clientId);
@@ -54,19 +76,28 @@
 
         // the client is notified when it is connected to the server.
         var onConnect = function(frame) {
-          debug("connected to MQTT");
+          debug("connected to IOTCOM");
           debug("connect to topic: " + destination);
           // $('#connect').fadeOut({ duration: 'fast' });
           // $('#connected').fadeIn();
           client.subscribe(destination);
+
+          
+        };
+
+        $('#manualsetok').click(function(event){
+          event.preventDefault();
+          $('#manualconfirm').hide();
+          $('#manual').show();
 
           var msg = "oridev=" + t_dev_random_name;
           message = new Messaging.Message(msg);
           message.destinationName = t_config_dest;
           client.send(message);
 
-          debug("create new topic: " + t_destination);
-        };
+          // debug("create new topic: " + t_destination);
+          console.log("create new topic: " + t_destination);
+        });
 
         // this allows to display debug logs directly on the web page
         var debug = function(str) {
@@ -166,6 +197,14 @@
         }
 
         function onMessageArrived(message) {
+          var current_timestamp = Date.parse(new Date());
+
+          if ( first_message && current_timestamp - timestamp < 1000) {
+            // alert(first_message);
+            first_message = false;
+            return;
+          }
+
           var total_messages = $("#messages").text();
           if( total_messages.length > 1000 ) $("#messages").text("");
 
@@ -183,7 +222,7 @@
               bytesString = bytesString + bytes[i].toString(16) + " ";
             };
             $("#messages").append(document.createTextNode(bytesString));
-          } else {
+          } else {            
             $("#messages").append(document.createTextNode(message.payloadString));
           }          
         }
@@ -206,6 +245,8 @@
           onFailure:onFailure
         }); 
       }
+
+
     });    
   //]]></script>
 {% endblock %}

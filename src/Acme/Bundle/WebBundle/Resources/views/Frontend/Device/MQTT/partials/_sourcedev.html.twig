@@ -2,31 +2,57 @@
   <h1 class="page-header">发送信息</h1>
 
   <div class="row placeholders">
-    <div class="col-sm-12">
-        {{ buttons.show16hex(true, true) }}
-    
-        <form id="send_form" class="form-horizontal">        
-            <div class="form-group">
-                <label class="col-sm-2 control-label">消息</label>
-                <div class="col-sm-10">
-                    <textarea id="send_form_input" class="form-control" rows="5" placeholder="输入要发送的消息..." style="min-height:200px;resize: none"></textarea>
+    <div id="manualset">
+        <div class="col-sm-12">
+            <p>手动控制后，原来与此设备相关的透传配置将失效.
+                </br>
+                如需透传请重新配置!
+            </p>
+            <p>
+                <a href="#" id="manualsetlink" class="btn btn-primary">
+                    设置手动控制
+                </a>
+            </p>
+            <p id="manualconfirm" style="display:none">
+                <a href="#" id="manualsetok" class="btn btn-success">
+                    确定
+                </a>
+                <a href="#" id="manualsetcancel" class="btn btn-danger">
+                    取消
+                </a>
+            </p>
+            <script type="text/javascript">
+                
+            </script>
+        </div>
+    </div>
+    <div id="manual" style="display:none">
+        <div class="col-sm-12">
+            {{ buttons.show16hex(true, true) }}
+        
+            <form id="send_form" class="form-horizontal">        
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">消息</label>
+                    <div class="col-sm-10">
+                        <textarea id="send_form_input" class="form-control" rows="5" placeholder="输入要发送的消息..." style="min-height:200px;resize: none"></textarea>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="col-sm-2 control-label"></label>
-                <div class="col-sm-10">
-                    <button id="send_button" type="submit" class="btn btn-primary">发送</button>
-                </div>
-            </div>        
-
-            <div class="form-group">
-                <label class="col-sm-2 control-label">记录</label>
-                <div class="col-sm-10">
-                    <pre id="info" style="min-height:40px"></pre>
-                </div>
-            </div>
-        </form>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                        <button id="send_button" type="submit" class="btn btn-primary">发送</button>
+                    </div>
+                </div>        
+    {# 
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">记录</label>
+                    <div class="col-sm-10">
+                        <pre id="info" style="min-height:40px"></pre>
+                    </div>
+                </div> #}
+            </form>
+        </div>
     </div>
   </div>
 </div>

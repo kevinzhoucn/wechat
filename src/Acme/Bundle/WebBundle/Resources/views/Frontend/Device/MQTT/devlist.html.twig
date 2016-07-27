@@ -16,6 +16,15 @@
     <script src='/js/jquery-1.7.2.min.js'></script>
     <script>
         $(document).ready(function(){
+            $("button#new_dev_submit").click(function(event){
+                event.preventDefault();
+                var dev_name = $("input#device_name").val();
+
+                if(dev_name) {
+                    $(this).parents("form").submit();
+                }
+            });
+
             $("a#dev_delete").click(function(){
                 var dev_id = $(this).data("id");
                 var r = confirm('删除【'+ $(this).data("name") +'】?','删除提示');

@@ -9,18 +9,20 @@
       </button>
       <a class="navbar-brand" href="#">积木派-物联</a>
 
-      {% if app.user %}
+      <!-- 
+      {#% if app.user %#}
         <ul class="nav navbar-nav navbar-right">
             
                 <li>
                     {# <a href="{{ path('security_logout') }}"> #}
-                    <a href="{{ path('acme_iot_user_logout') }}">
+                    <a href="{#{ path('acme_iot_user_logout') }}">
                         <i class="fa fa-sign-out"></i>
                         退出 
                     </a>
                 </li>            
         </ul>
-      {% endif %}
+      {#% endif %#}
+      -->
     </div>
   </div>
 </nav>

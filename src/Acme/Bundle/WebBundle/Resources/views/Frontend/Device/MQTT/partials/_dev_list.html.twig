@@ -13,7 +13,7 @@
                     <fieldset>
                         <div class="form-group">
                             {{ form_widget(form.name, {'attr': {'placeholder' : '字母开头和数字的组合', 'style' : 'float:left;width:60%'}}) }}
-                            <button type="submit" class="btn btn-primary" style="width:30%;float:right">创建新设备</button>
+                            <button id="new_dev_submit" type="submit" class="btn btn-primary" style="width:30%;float:right">创建新设备</button>
                         </div>                   
                     </fieldset>
                 {{ form_end(form) }}
@@ -29,12 +29,16 @@
                     <li class="list-group-item">
                         {{ item.name }}
                         <div class="pull-right">
-                            <a href="{{ path('acme_frontend_device_mqtt_item_message', {'id' : item.id}) }}" title="查看详情">
-                                <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+                            <a href="{{ path('acme_frontend_device_mqtt_item_message', {'id' : item.id}) }}" title="查看详情"
+                                class="btn-sm btn-info pull-left" style="margin-right:10px">
+                                {# <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> #}
+                                查看
                             </a>
 
-                            <a id="dev_delete" title="点击删除" data-id="{{ item.id }}" data-name="{{ item.name }}">
-                                <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                            <a id="dev_delete" title="点击删除" data-id="{{ item.id }}" data-name="{{ item.name }}"
+                                class="btn-sm btn-danger pull-right">
+                                {# <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> #}
+                                删除
                                 {{ buttons.delete(path('acme_frontend_device_mqtt_dev_delete', {'id': item.id}), null, false, false) }}
                             </a>
                         </div>

@@ -40,7 +40,9 @@ $(document).ready(function(){
                 var n = parseInt("0x" + textHex);
                 // console.log("0x" + textHex);
 
-                if (!n) {
+
+
+                if (!n && n !== 0) {
                     isHex = false;
                     formatText = text.substring(0, i);
                 }
