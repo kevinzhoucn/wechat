@@ -41,7 +41,7 @@ class DeviceController extends Controller
         $user = $this->getUser();
         $deviceKey = $user->getDeviceKey();
         
-        $devices = $user->getDevices();        
+        $devices = $user->getDevices();
 
         $test_str = "|12345";
 

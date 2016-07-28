@@ -38,6 +38,8 @@
       var timestamp = Date.parse(new Date()); 
       var first_message = true;
 
+      var message_number = 0;
+
       console.log(timestamp);
 
       // alert(timestamp);
@@ -52,7 +54,7 @@
         //     Please use a Web Browser with WebSockets support (WebKit or Google Chrome).\
         //     </p>\
         // ");
-      } else {            
+      } else {
         var client, destination;
         
         // var host = "168.63.134.186";
@@ -104,7 +106,7 @@
         // this allows to display debug logs directly on the web page
         var debug = function(str) {
           $("#info").append(document.createTextNode(str + "\n"));
-        };  
+        };
 
         // $('#disconnect').click(function() {
         //   client.disconnect();
@@ -222,14 +224,22 @@
             var bytes = message.payloadBytes;
             console.log(bytes);
 
+            message_number = message_number + bytes.length;
+
             var bytesString = "";
             for (var i = 0; i < bytes.length; i++) {
               bytesString = bytesString + bytes[i].toString(16) + " ";
             };
             $("#messages").append(document.createTextNode(bytesString));
-          } else {            
-            $("#messages").append(document.createTextNode(message.payloadString));
-          }          
+          } else {
+            var message_str = message.payloadString;
+            $("#messages").append(document.createTextNode(message_str));
+
+            message_number = message_number + message_str.length;
+          }
+
+          console.log("message length: " + message_number);
+          $("#rec_length").text(message_number);
         }
 
         function onConnectionLost(responseObject) {

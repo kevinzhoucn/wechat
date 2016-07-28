@@ -125,7 +125,7 @@
                 if( oridev && targetdev ) {
                     var msg = "oridev=" + oridev;
                     message = new Messaging.Message(msg);
-                    message.destinationName = "MQTT/SUBCONFIG/{{ username }}/" + targetdev;
+                    message.destinationName = "IOTCOM/SUBCONFIG/{{ username }}/" + targetdev;
                     client.send(message);
 
                     debug("设备透传: " + oridev + " => " + targetdev);
