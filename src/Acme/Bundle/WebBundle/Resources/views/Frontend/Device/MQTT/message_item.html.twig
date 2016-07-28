@@ -66,7 +66,7 @@
 
         destination = "IOTCOM/RAWDATA/{{ username }}/{{ devname }}";
         // destination = "IOTCOM/RAWDATA/test/device1";
-        var t_config_dest = "IOTCOM/SUBCONFIG/{{ username }}/{{ devname }}";        
+        var t_config_dest = "IOTCOM/SUBCONFIG/{{ username }}/{{ devname }}";
 
         var t_dev_random = parseInt(Math.random() * (9999 - 1000 + 1) + 1000);
         console.log(t_dev_random);
@@ -85,8 +85,6 @@
           // $('#connect').fadeOut({ duration: 'fast' });
           // $('#connected').fadeIn();
           client.subscribe(destination);
-
-          
         };
 
         $('#manualsetok').click(function(event){

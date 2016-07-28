@@ -90,13 +90,14 @@
           } else {            
             var client, destination;
             
-            var host = "168.63.134.186";
+            //var host = "168.63.134.186";
+            var host = "121.42.180.136";
             // var host = "";
             var port = "61623";
             var user = "admin";
             var password = "password";
             
-            destination = "MQTT/SUBCONFIG/";
+            destination = "IOTCOM/SUBCONFIG/";
 
             client = new Messaging.Client(host, Number(port), clientId);
 
@@ -130,6 +131,7 @@
 
                     debug("设备透传: " + oridev + " => " + targetdev);
                     alert("设置透传成功：" + oridev + "=>" + targetdev + "!");
+                    console.log("设备透传: " + oridev + " => " + targetdev);
                 }
 
               // if (text) {
